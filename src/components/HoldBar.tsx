@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 0,
     display: 'flex',
-    marginTop: '100%',
+    marginTop: '140%',
     backgroundColor: 'transparent',
   },
   holdBar: {
