@@ -9,7 +9,7 @@ import NavigationBottomsTabs from './src/components/NavigationBottomsTabs';
 import { useGameLoop } from './src/utils/gameLogic';
 import { GlobalValuesProvider, useGlobalValues } from './src/contexts/GlobalValuesContext';
 
-const Tab = createBottomTabNavigator(); // Используем BottomTabNavigator
+const Tab = createBottomTabNavigator();
 
 const theme = {
   ...DefaultTheme,

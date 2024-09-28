@@ -7,7 +7,7 @@ const DebugPanel = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.statuses, styles.textCenter]}>
+      {/* <Text style={[styles.statuses, styles.textCenter]}>
         Debug Panel
       </Text>
       <Text style={styles.statuses}>
@@ -28,11 +28,11 @@ const DebugPanel = () => {
         >
           <Text>False</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <Text style={styles.statuses}>
         Progress - {values.holdBar.progress.toFixed(2)}
       </Text>
-      <View style={styles.controls}>
+      {/* <View style={styles.controls}>
         <TouchableOpacity
           onPress={() => {
             valuesRef.current.holdBar.progress = 0;
@@ -66,7 +66,27 @@ const DebugPanel = () => {
         >
           <Text>+ 10</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
+      {/* <Text style={styles.statuses}>
+        Delay before discharging max value - {values.holdBar.delayBeforeDischargeMaxValue?.toFixed(2)}
+      </Text> */}
+      <Text style={styles.statuses}>
+        Delay before discharging current value - {values.holdBar.delayBeforeDischargeCurrentValue?.toFixed(2)}
+      </Text>
+      {/* <Text style={styles.statuses}>
+        Delay before discharging - {values.holdBar.delayBeforeDischargeMaxValue}
+      </Text>
+      <Text style={styles.statuses}>
+        Delay before discharging - {values.holdBar.delayBeforeDischargeMaxValue}
+      </Text> */}
+      <Text style={styles.statuses}>
+        Discharging speed - {values.unitGenerator.rate.toFixed(2)}
+      </Text>
+      {/* <Text style={styles.statuses}>
+        Timestamp - {values.testValue1?.toString()}
+        Last timestamp - {values.testValue2?.toString()}
+        Delta time - {values.testValue3?.toString()}
+      </Text> */}
     </View>
   );
 };

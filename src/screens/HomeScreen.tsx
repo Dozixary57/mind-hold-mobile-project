@@ -12,7 +12,6 @@ const HomeScreen = ({ navigation }: INavigationProps) => {
     <View style={styles.container}>
       <DebugPanel />
       <HoldBar />
-      {/* <NavigationBottomsTabs navigation={navigation} /> */}
     </View>
   );
 };

@@ -5,24 +5,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface IGlobalValues {
   app: {
     lastActiveTime: number;
-  }
+  },
+  lvl: number;
   holdBar: {
     progress: number;
     capacity: number;
     chargingSpeed: number;
     dischargingSpeed: number;
-    delayBeforeDischarge: number;
+    delayBeforeDischargeCurrentValue: number;
+    delayBeforeDischargeMaxValue: number;
     isFreezed: boolean;
   };
   unitGenerator: {
     rate: number;
     amount: number;
     isFreezed: boolean;
-    // unitPerSecond: number;
   };
   unitStorage: {
     capacity: number;
   };
+  // testValue1: number;
+  // testValue2: number;
+  // testValue3: number;
 }
 
 interface GlobalValuesProviderProps {
@@ -53,23 +57,27 @@ const initialValues: IGlobalValues = {
   app: {
     lastActiveTime: 0,
   },
+  lvl: 1,
   holdBar: {
     progress: 0,
     capacity: 10,
     chargingSpeed: 1,
     dischargingSpeed: 1,
-    delayBeforeDischarge: 3,
+    delayBeforeDischargeCurrentValue: 0,
+    delayBeforeDischargeMaxValue: 3,
     isFreezed: false,
   },
   unitGenerator: {
     rate: 1,
     amount: 0.15,
     isFreezed: false,
-    // unitPerSecond: 1 * 0.15,
   },
   unitStorage: {
     capacity: 5,
   },
+  // testValue1: 0,
+  // testValue2: 0,
+  // testValue3: 0,
 };
 
 const STORAGE_KEY = 'globalValues';
@@ -97,21 +105,17 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
     loadValues();
   }, []);
 
-  useEffect(() => {
-    valuesRef.current = values;
-  }, [values]);
+  // useEffect(() => {
+  //   valuesRef.current = values;
 
-  useEffect(() => {
-    isHoldingRef.current = isHolding;
-  }, [isHolding]);
+  //   if (valuesRef.current.holdBar.capacity <= 0) {
+  //     valuesRef.current.holdBar.capacity = 1;      
+  //   }
+  // }, [values]);
 
   const updateValues = useCallback((newValues: Partial<IGlobalValues>) => {
     setValues(prevValues => {
       const updatedValues = { ...prevValues, ...newValues };
-
-      // if ('unitGenerator' in newValues) {
-      //   updatedValues.unitGenerator.unitPerSecond = updatedValues.unitGenerator.rate * updatedValues.unitGenerator.amount;
-      // }
 
       AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch(e => {
         console.error('Failed to save values to storage', e);

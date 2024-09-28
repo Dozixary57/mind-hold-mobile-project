@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
-const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => { // Используем правильный тип
+const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
   return (
     <View style={styles.container}>
       {/* <TouchableOpacity
