@@ -8,6 +8,7 @@ import InventoryScreen from './src/screens/InventoryScreen';
 import NavigationBottomsTabs from './src/components/NavigationBottomsTabs';
 import { useGameLoop } from './src/utils/gameLogic';
 import { GlobalValuesProvider, useGlobalValues } from './src/contexts/GlobalValuesContext';
+import { StatusBar } from 'expo-status-bar';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +56,7 @@ function AppContent() {
 export default function App() {
   return (
     <GlobalValuesProvider>
+      <StatusBar hidden={true} />
       <AppContent />
     </GlobalValuesProvider>
   );
