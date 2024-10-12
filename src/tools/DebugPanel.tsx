@@ -29,9 +29,9 @@ const DebugPanel = () => {
           <Text>False</Text>
         </TouchableOpacity>
       </View> */}
-      <Text style={styles.statuses}>
+      {/* <Text style={styles.statuses}>
         Progress - {values.holdBar.progress.toFixed(2)}
-      </Text>
+      </Text> */}
       {/* <View style={styles.controls}>
         <TouchableOpacity
           onPress={() => {
@@ -79,17 +79,34 @@ const DebugPanel = () => {
       <Text style={styles.statuses}>
         Delay before discharging - {values.holdBar.delayBeforeDischargeMaxValue}
       </Text> */}
-      <Text style={styles.statuses}>
+      {/* <Text style={styles.statuses}>
         Discharging speed - {values.unitGenerator.rate.toFixed(2)}
-      </Text>
+      </Text> */}
       {/* <Text style={styles.statuses}>
         Timestamp - {values.testValue1?.toString()}
         Last timestamp - {values.testValue2?.toString()}
         Delta time - {values.testValue3?.toString()}
       </Text> */}
       <Text style={styles.statuses}>
-        lvl - {values.lvl_experience}
+        Experience - {values.lvl_experience}
       </Text>
+
+      <View style={styles.controls}>
+        <TouchableOpacity
+          onPress={() => {
+            valuesRef.current.lvl_experience -= 100;
+          }}
+        >
+          <Text>-</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            valuesRef.current.lvl_experience += 100;
+          }}
+        >
+          <Text>+</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
