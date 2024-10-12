@@ -1,16 +1,16 @@
 // src/screens/MainScreen.tsx
 import React from "react";
-import { StyleSheet, View, Text, StatusBar } from "react-native";
+import { View } from "react-native";
 import HoldBar from "../components/HoldBar";
 import DebugPanel from "../tools/DebugPanel";
-import NavigationBottomsTabs from "../components/NavigationBottomsTabs";
-import { INavigationProps } from "../interfaces/INavigationProps";
 import styles from "../styles/styles";
+import LevelAndStorageBar from "../components/LevelAndStorageBar";
 
-const HomeScreen = ({ navigation }: INavigationProps) => {
+const HomeScreen = () => {
   return (
-    <View style={styles.container}>
-      <DebugPanel />
+    <View style={styles.ScreenContainer}>
+      <LevelAndStorageBar />
+      {/* <DebugPanel /> */}
       <HoldBar />
     </View>
   );

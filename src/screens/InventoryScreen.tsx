@@ -5,7 +5,7 @@ import styles from "../styles/styles";
 
 const InventoryScreen = ({ navigation }: INavigationProps) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.ScreenContainer}>
       <Text style={styles.text}>Inventory Screen</Text>
       {/* <NavigationBottomsTabs navigation={navigation} /> */}
     </View>

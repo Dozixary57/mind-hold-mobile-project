@@ -87,6 +87,9 @@ const DebugPanel = () => {
         Last timestamp - {values.testValue2?.toString()}
         Delta time - {values.testValue3?.toString()}
       </Text> */}
+      <Text style={styles.statuses}>
+        lvl - {values.lvl_experience}
+      </Text>
     </View>
   );
 };

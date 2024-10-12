@@ -6,7 +6,7 @@ export interface IGlobalValues {
   app: {
     lastActiveTime: number;
   },
-  lvl: number;
+  lvl_experience: number;
   holdBar: {
     progress: number;
     capacity: number;
@@ -23,6 +23,7 @@ export interface IGlobalValues {
   };
   unitStorage: {
     capacity: number;
+    units: number;
   };
   // testValue1: number;
   // testValue2: number;
@@ -57,7 +58,7 @@ const initialValues: IGlobalValues = {
   app: {
     lastActiveTime: 0,
   },
-  lvl: 1,
+  lvl_experience: 0,
   holdBar: {
     progress: 0,
     capacity: 10,
@@ -74,6 +75,7 @@ const initialValues: IGlobalValues = {
   },
   unitStorage: {
     capacity: 5,
+    units: 0,
   },
   // testValue1: 0,
   // testValue2: 0,

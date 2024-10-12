@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderTopColor: 'white',
-    borderTopWidth: 3,
+    borderTopWidth: 2,
     paddingVertical: 10,
     backgroundColor: 'black',
   },

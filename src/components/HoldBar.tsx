@@ -1,15 +1,14 @@
 // src\components\HoldBar.tsx
 import React from 'react';
-import { View, Text, StyleSheet, PanResponder, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, PanResponder } from 'react-native';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
+import { GetScreenHeight, GetScreenWidth } from '../tools/ScreenWidth';
 
 const HoldBar = () => {
   const { values, isHolding, setIsHolding } = useGlobalValues();
 
-  const screenWidth = Dimensions.get('window').width;
-  const screenHeight = Dimensions.get('window').height;
-  const holdBarWidth = screenWidth * 0.8;
-  const holdBarHeight = screenHeight * 0.08;
+  const holdBarWidth = GetScreenWidth() * 0.9;
+  const holdBarHeight = GetScreenHeight() * 0.08;
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 0,
     display: 'flex',
-    marginTop: '140%',
+    // marginTop: '140%',
     backgroundColor: 'transparent',
   },
   holdBar: {
