@@ -7,7 +7,7 @@ export interface IGlobalValues {
     lastActiveTime: number;
   },
   lvl_experience: number;
-  holdBar: {
+  hold_bar: {
     progress: number;
     capacity: number;
     chargingSpeed: number;
@@ -16,18 +16,22 @@ export interface IGlobalValues {
     delayBeforeDischargeMaxValue: number;
     isFreezed: boolean;
   };
-  unitGenerator: {
+  core_generator: {
     rate: number;
     amount: number;
     isFreezed: boolean;
   };
-  unitStorage: {
+  core_storage: {
     capacity: number;
     units: number;
   };
-  // testValue1: number;
-  // testValue2: number;
-  // testValue3: number;
+  core_parameters: {
+    analysis: number;
+    logic: number;
+    intuition: number;
+    creativity: number;
+    ideation: number;
+  };
 }
 
 interface GlobalValuesProviderProps {
@@ -59,7 +63,7 @@ const initialValues: IGlobalValues = {
     lastActiveTime: 0,
   },
   lvl_experience: 0,
-  holdBar: {
+  hold_bar: {
     progress: 0,
     capacity: 10,
     chargingSpeed: 1,
@@ -68,18 +72,22 @@ const initialValues: IGlobalValues = {
     delayBeforeDischargeMaxValue: 3,
     isFreezed: false,
   },
-  unitGenerator: {
+  core_generator: {
     rate: 1,
     amount: 0.15,
     isFreezed: false,
   },
-  unitStorage: {
+  core_storage: {
     capacity: 5,
     units: 0,
   },
-  // testValue1: 0,
-  // testValue2: 0,
-  // testValue3: 0,
+  core_parameters: {
+    analysis: 1,
+    logic: 1,
+    intuition: 1,
+    creativity: 1,
+    ideation: 1,
+  },
 };
 
 const STORAGE_KEY = 'globalValues';

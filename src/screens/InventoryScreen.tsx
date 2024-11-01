@@ -3,6 +3,8 @@ import { View, Text } from "react-native";
 import { INavigationProps } from "../interfaces/INavigationProps";
 import styles from "../styles/styles";
 
+// Critical thinking like a multiple parameter of parameters
+
 const InventoryScreen = ({ navigation }: INavigationProps) => {
   return (
     <View style={styles.ScreenContainer}>

@@ -13,14 +13,14 @@ export const useGameLoop = () => {
     let lastTimestamp = 0;
 
     const gameLoop = (timestamp: number) => {
-      if (valuesRef.current.holdBar.isFreezed) return;
+      if (valuesRef.current.hold_bar.isFreezed) return;
 
       if (!lastTimestamp) lastTimestamp = timestamp;
       const deltaTime = (timestamp - lastTimestamp) / 1000;
       lastTimestamp = timestamp;
 
       const newValues = { ...valuesRef.current };
-      let newProgress = newValues.holdBar.progress;
+      let newProgress = newValues.hold_bar.progress;
 
       //
       // newValues.testValue1 = timestamp;
@@ -29,19 +29,19 @@ export const useGameLoop = () => {
       //
 
       if (isHoldingRef.current) {
-        newProgress += newValues.holdBar.chargingSpeed * deltaTime;
-        newValues.holdBar.delayBeforeDischargeCurrentValue = newValues.holdBar.delayBeforeDischargeMaxValue;
+        newProgress += newValues.hold_bar.chargingSpeed * deltaTime;
+        newValues.hold_bar.delayBeforeDischargeCurrentValue = newValues.hold_bar.delayBeforeDischargeMaxValue;
       } else {
-        if (newValues.holdBar.delayBeforeDischargeCurrentValue > 0) {
-          newValues.holdBar.delayBeforeDischargeCurrentValue -= newValues.holdBar.dischargingSpeed * deltaTime;
+        if (newValues.hold_bar.delayBeforeDischargeCurrentValue > 0) {
+          newValues.hold_bar.delayBeforeDischargeCurrentValue -= newValues.hold_bar.dischargingSpeed * deltaTime;
         } else {
-          newValues.holdBar.delayBeforeDischargeCurrentValue = 0;
-          newProgress -= newValues.holdBar.dischargingSpeed * deltaTime;
+          newValues.hold_bar.delayBeforeDischargeCurrentValue = 0;
+          newProgress -= newValues.hold_bar.dischargingSpeed * deltaTime;
           if (newProgress < 0) newProgress = 0;
         }
       }
 
-      newValues.holdBar.progress = Math.max(0, Math.min(newValues.holdBar.capacity, newProgress));
+      newValues.hold_bar.progress = Math.max(0, Math.min(newValues.hold_bar.capacity, newProgress));
 
       updateValues(newValues);
 

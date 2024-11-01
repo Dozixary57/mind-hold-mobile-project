@@ -71,7 +71,7 @@ const DebugPanel = () => {
         Delay before discharging max value - {values.holdBar.delayBeforeDischargeMaxValue?.toFixed(2)}
       </Text> */}
       <Text style={styles.statuses}>
-        Delay before discharging current value - {values.holdBar.delayBeforeDischargeCurrentValue?.toFixed(2)}
+        Delay before discharging current value - {values.hold_bar.delayBeforeDischargeCurrentValue?.toFixed(2)}
       </Text>
       {/* <Text style={styles.statuses}>
         Delay before discharging - {values.holdBar.delayBeforeDischargeMaxValue}

@@ -18,7 +18,7 @@ const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
         onPress={() => navigation.navigate('InventoryScreen')}
       >
         <Image
-          source={require('../images/InventoryIcon.png')}
+          source={require('../assets/images/InventoryIcon.png')}
           style={styles.image}
         />
       </TouchableOpacity>
@@ -27,7 +27,7 @@ const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
         onPress={() => navigation.navigate('MainScreen')}
       >
         <Image
-          source={require('../images/HomeIcon.png')}
+          source={require('../assets/images/HomeIcon.png')}
           style={styles.image}
         />
       </TouchableOpacity>

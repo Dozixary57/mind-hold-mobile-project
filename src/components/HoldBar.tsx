@@ -20,14 +20,14 @@ const HoldBar = () => {
   return (
     <View style={[styles.container, { width: holdBarWidth, height: holdBarHeight }]}>
       <Text style={styles.holdBarUnitRate}>
-        {values.unitGenerator.rate * values.unitGenerator.amount} / s
+        {values.core_generator.rate * values.core_generator.amount} / s
       </Text>
       <View
         {...panResponder.panHandlers}
         style={styles.holdBar}
       >
         <View
-          style={[styles.holdBarProgress, { width: `${(values.holdBar.progress / values.holdBar.capacity) * 100}%` }]}
+          style={[styles.holdBarProgress, { width: `${(values.hold_bar.progress / values.hold_bar.capacity) * 100}%` }]}
         />
       </View>
       <Text style={styles.holdBarStatus}>
