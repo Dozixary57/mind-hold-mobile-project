@@ -5,7 +5,7 @@ import styles from "../styles/styles";
 
 // Critical thinking like a multiple parameter of parameters
 
-const InventoryScreen = ({ navigation }: INavigationProps) => {
+const UpgradeScreen = ({ navigation }: INavigationProps) => {
   return (
     <View style={styles.ScreenContainer}>
       <Text style={styles.text}>Inventory Screen</Text>
@@ -14,4 +14,4 @@ const InventoryScreen = ({ navigation }: INavigationProps) => {
   );
 };
 
-export default InventoryScreen;
+export default UpgradeScreen;

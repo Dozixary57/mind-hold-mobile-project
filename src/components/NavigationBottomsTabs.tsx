@@ -15,19 +15,31 @@ const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
       </TouchableOpacity> */}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('InventoryScreen')}
+        onPress={() => navigation.navigate('UpgradeScreen')}
+        style={[styles.buttons, styles.leftButton]}
       >
         <Image
-          source={require('../assets/images/InventoryIcon.png')}
+          source={require('../assets/images/UpgradeScreenIcon.png')}
           style={styles.image}
         />
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('MainScreen')}
+        onPress={() => navigation.navigate('HomeScreen')}
+        style={[styles.buttons, styles.middleButton]}
       >
         <Image
-          source={require('../assets/images/HomeIcon.png')}
+          source={require('../assets/images/HomeScreenIcon.png')}
+          style={styles.image}
+        />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('StatisticsScreen')}
+        style={[styles.buttons, styles.rightButton]}
+      >
+        <Image
+          source={require('../assets/images/StatisticsScreenIcon.png')}
           style={styles.image}
         />
       </TouchableOpacity>
@@ -39,12 +51,27 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     flexDirection: 'row',
-    justifyContent: 'space-around',
     borderTopColor: 'white',
     borderTopWidth: 2,
-    paddingVertical: 10,
     backgroundColor: 'black',
   },
+  buttons: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'white',
+    paddingVertical: 7,
+  },
+  leftButton: {
+    borderRightWidth: 2,
+  },
+  middleButton: {
+    
+  },
+  rightButton: {
+    borderLeftWidth: 2,
+  },
+
   image: {
     width: 50,
     height: 50,
