@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     borderTopColor: 'white',
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     backgroundColor: 'black',
   },
   buttons: {
@@ -63,13 +63,14 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   leftButton: {
-    borderRightWidth: 2,
+    borderRightWidth: 1,
   },
   middleButton: {
-    
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
   },
   rightButton: {
-    borderLeftWidth: 2,
+    borderLeftWidth: 1,
   },
 
   image: {

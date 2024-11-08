@@ -3,7 +3,14 @@ import { useEffect } from 'react';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 
 export const useGameLoop = () => {
-  const { valuesRef, updateValues, isHoldingRef, isHolding, setIsHolding } = useGlobalValues();
+  const { valuesRef, updateValues, isHoldingRef, isHolding } = useGlobalValues();
+
+  //
+  // useEffect(() => {
+  //   valuesRef.current.core_generator.amount = 100;
+  //   valuesRef.current.core_generator.rate = 1;
+  // }, [])
+  //
 
   useEffect(() => {
     isHoldingRef.current = isHolding;
@@ -21,12 +28,6 @@ export const useGameLoop = () => {
 
       const newValues = { ...valuesRef.current };
       let newProgress = newValues.hold_bar.progress;
-
-      //
-      // newValues.testValue1 = timestamp;
-      // newValues.testValue2 = lastTimestamp;
-      // newValues.testValue3 = deltaTime;
-      //
 
       if (isHoldingRef.current) {
         newProgress += newValues.hold_bar.chargingSpeed * deltaTime;

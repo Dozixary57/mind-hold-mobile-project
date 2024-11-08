@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface IGlobalValues {
   app: {
     lastActiveTime: number;
-  },
+  };
   lvl_experience: number;
   hold_bar: {
     progress: number;
@@ -46,6 +46,8 @@ export interface GlobalValuesContextProps {
   isHolding: boolean;
   setIsHolding: React.Dispatch<React.SetStateAction<boolean>>;
   isHoldingRef: React.MutableRefObject<boolean>;
+  isActive: boolean;
+  isActiveRef: React.MutableRefObject<boolean>;
 }
 
 const GlobalValuesContext = createContext<GlobalValuesContextProps | undefined>(undefined);
@@ -98,6 +100,13 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
   const [isHolding, setIsHolding] = useState(false);
   const isHoldingRef = useRef(isHolding);
 
+  const isActive = values.hold_bar.progress > 0;
+  const isActiveRef = useRef(isActive);
+
+  useEffect(() => {
+    isActiveRef.current = isActive;
+  }, [isActive]);
+
   useEffect(() => {
     const loadValues = async () => {
       try {
@@ -115,36 +124,40 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
     loadValues();
   }, []);
 
-  // useEffect(() => {
-  //   valuesRef.current = values;
-
-  //   if (valuesRef.current.holdBar.capacity <= 0) {
-  //     valuesRef.current.holdBar.capacity = 1;      
-  //   }
-  // }, [values]);
-
   const updateValues = useCallback((newValues: Partial<IGlobalValues>) => {
-    setValues(prevValues => {
+    setValues((prevValues) => {
       const updatedValues = { ...prevValues, ...newValues };
 
-      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch(e => {
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) => {
         console.error('Failed to save values to storage', e);
       });
 
+      valuesRef.current = updatedValues;
       return updatedValues;
     });
   }, []);
 
   const saveAppData = useCallback(() => {
     const updatedValues = { ...values, app: { ...values.app, lastActiveTime: Date.now() } };
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch(e => {
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) => {
       console.error('Failed to save values to storage', e);
     });
     setValues(updatedValues);
+    valuesRef.current = updatedValues;
   }, [values]);
 
   return (
-    <GlobalValuesContext.Provider value={{ values, valuesRef, updateValues, saveAppData, isHolding, setIsHolding, isHoldingRef }}>
+    <GlobalValuesContext.Provider value={{
+      values,
+      valuesRef,
+      updateValues,
+      saveAppData,
+      isHolding,
+      setIsHolding,
+      isHoldingRef,
+      isActive,
+      isActiveRef,
+    }}>
       {children}
     </GlobalValuesContext.Provider>
   );
