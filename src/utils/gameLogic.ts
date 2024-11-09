@@ -7,8 +7,8 @@ export const useGameLoop = () => {
 
   //
   // useEffect(() => {
-  //   valuesRef.current.core_generator.amount = 100;
-  //   valuesRef.current.core_generator.rate = 1;
+  //   valuesRef.current.core_generator.amount = 25;
+  //   valuesRef.current.core_generator.rate = 2;
   // }, [])
   //
 

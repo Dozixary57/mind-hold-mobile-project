@@ -302,6 +302,10 @@ const calculateProblemWeightOnParameters = (problemValue: IProblem, userValue: I
     calculatedWeight += (calculatedWeight * calculateWeightDifference(userParamWeight, problemParamWeight)) / 100;
   });
 
+  if (calculatedWeight < (problemValue.weight / 100 * 10)) {
+    return Math.round(problemValue.weight / 100 * 10);
+  }
+
   return Math.round(calculatedWeight);
 };
 
@@ -325,6 +329,7 @@ const generateProblem = (): IProblem => {
     creativity: location.weight + extra.weight,
     ideation: descriptor.weight + objective.weight,
   };
+
   return {
     title: `Проблема #${generateProblemNumber()}`,
     description: `${location.text} ${descriptor.text} ${event.text} ${character.text} ${emotion.text} ${subject.text} ${extra.text} ${action.text} ${objective.text} ${outcome.text}`,
@@ -383,11 +388,28 @@ const ProblemGenerator = () => {
   useEffect(() => {
     if (shouldUpdateValues) {
       updateValues({
-        core_storage: { 
-          ...valuesRef.current.core_storage, 
-          units: valuesRef.current.core_storage.units + problem.reward.neurobits > valuesRef.current.core_storage.capacity ? valuesRef.current.core_storage.capacity : valuesRef.current.core_storage.units + problem.reward.neurobits 
+        core_storage: {
+          ...valuesRef.current.core_storage,
+          units: valuesRef.current.core_storage.units + problem.reward.neurobits > valuesRef.current.core_storage.capacity ? valuesRef.current.core_storage.capacity : valuesRef.current.core_storage.units + problem.reward.neurobits
         },
         lvl_experience: valuesRef.current.lvl_experience + problem.reward.expirience,
+        statistics: {
+          ...valuesRef.current.statistics,
+          totalSolvedProblems: valuesRef.current.statistics.totalSolvedProblems + 1,
+          totalGainedNeurobits:
+            valuesRef.current.statistics.totalGainedNeurobits +
+            ((valuesRef.current.core_storage.units + problem.reward.neurobits) >
+              (valuesRef.current.core_storage.capacity - valuesRef.current.core_storage.units) ?
+              (valuesRef.current.core_storage.capacity - valuesRef.current.core_storage.units)
+              :
+              problem.reward.neurobits),
+          maxProblemAnalysisParameter: Math.max(valuesRef.current.statistics.maxProblemAnalysisParameter, problem.parameters.analysis),
+          maxProblemLogicParameter: Math.max(valuesRef.current.statistics.maxProblemLogicParameter, problem.parameters.logic),
+          maxProblemIntuitionParameter: Math.max(valuesRef.current.statistics.maxProblemIntuitionParameter, problem.parameters.intuition),
+          maxProblemCreativityParameter: Math.max(valuesRef.current.statistics.maxProblemCreativityParameter, problem.parameters.creativity),
+          maxProblemIdeationParameter: Math.max(valuesRef.current.statistics.maxProblemIdeationParameter, problem.parameters.ideation),
+          maxProblemWeight: Math.max(valuesRef.current.statistics.maxProblemWeight, problemWeight),
+        },
       });
       setShouldUpdateValues(false);
     }

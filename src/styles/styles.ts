@@ -47,7 +47,7 @@ const gStyles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingTop: 8,
+    paddingTop: 20,
     paddingBottom: 6,
     opacity: 0.5,
   },

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import gStyles from "../styles/styles";
 import { useGlobalValues } from "../contexts/GlobalValuesContext";
 import { LevelCalculate } from "../tools/LevelAndExperienceCalculating";
@@ -13,7 +13,7 @@ const StatisticsScreen = () => {
     <View style={gStyles.ScreenContainer_start}>
       <Text style={gStyles.bigHeader}>Statistics</Text>
       <View style={gStyles.separator} />
-      <View style={styles.statsList}>
+      <ScrollView style={styles.statsList}>
         {/* <Text style={gStyles.simpleHeader}>General Stats</Text> */}
 
         <View style={gStyles.subsectionTitleSeparator_container}>
@@ -21,12 +21,32 @@ const StatisticsScreen = () => {
           <View style={gStyles.subsectionTitleSeparator_line} />
         </View>
         <View style={styles.statsItem}>
-          <Text style={styles.statsTitle}>Current level</Text>
+          <Text style={styles.statsTitle}>In game total spent time</Text>
+          {/* <Text style={styles.statsValue}>{values.lvl_experience}</Text> */}
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Active spent time</Text>
+          {/* <Text style={styles.statsValue}>{values.lvl_experience}</Text> */}
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Inactive spent time</Text>
+          {/* <Text style={styles.statsValue}>{values.lvl_experience}</Text> */}
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Total problems solved</Text>
+          <Text style={styles.statsValue}>{values.statistics.totalSolvedProblems}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Reached level</Text>
           <Text style={styles.statsValue}>{LevelCalculate(values.lvl_experience)}</Text>
         </View>
         <View style={styles.statsItem}>
           <Text style={styles.statsTitle}>Total experience points</Text>
           <Text style={styles.statsValue}>{values.lvl_experience}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Total gained neurobits</Text>
+          <Text style={styles.statsValue}>{values.statistics.totalGainedNeurobits}</Text>
         </View>
 
         <View style={gStyles.subsectionTitleSeparator_container}>
@@ -54,7 +74,36 @@ const StatisticsScreen = () => {
           <Text style={styles.statsValue}>{values.core_parameters.ideation}</Text>
         </View>
 
-      </View>
+        <View style={gStyles.subsectionTitleSeparator_container}>
+          <Text style={gStyles.subsectionTitleSeparator_text}>Problem</Text>
+          <View style={gStyles.subsectionTitleSeparator_line} />
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Max analysis parameter</Text>
+          <Text style={styles.statsValue}>{values.statistics.maxProblemAnalysisParameter}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Max logic parameter</Text>
+          <Text style={styles.statsValue}>{values.statistics.maxProblemLogicParameter}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Max intuition parameter</Text>
+          <Text style={styles.statsValue}>{values.statistics.maxProblemIntuitionParameter}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Max creativity parameter</Text>
+          <Text style={styles.statsValue}>{values.statistics.maxProblemCreativityParameter}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Max ideation parameter</Text>
+          <Text style={styles.statsValue}>{values.statistics.maxProblemIdeationParameter}</Text>
+        </View>
+        <View style={styles.statsItem}>
+          <Text style={styles.statsTitle}>Max weight</Text>
+          <Text style={styles.statsValue}>{values.statistics.maxProblemWeight}</Text>
+        </View>
+
+      </ScrollView>
     </View >
   );
 };

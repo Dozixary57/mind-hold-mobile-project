@@ -32,6 +32,17 @@ export interface IGlobalValues {
     creativity: number;
     ideation: number;
   };
+  statistics: {
+    totalInGameTime: number;
+    totalSolvedProblems: number;
+    totalGainedNeurobits: number;
+    maxProblemAnalysisParameter: number;
+    maxProblemLogicParameter: number;
+    maxProblemIntuitionParameter: number;
+    maxProblemCreativityParameter: number;
+    maxProblemIdeationParameter: number;
+    maxProblemWeight: number;
+  }
 }
 
 interface GlobalValuesProviderProps {
@@ -89,6 +100,17 @@ const initialValues: IGlobalValues = {
     intuition: 1,
     creativity: 1,
     ideation: 1,
+  },
+  statistics: {
+    totalInGameTime: 0,
+    totalSolvedProblems: 0,
+    totalGainedNeurobits: 0,
+    maxProblemAnalysisParameter: 1,
+    maxProblemLogicParameter: 1,
+    maxProblemIntuitionParameter: 1,
+    maxProblemCreativityParameter: 1,
+    maxProblemIdeationParameter: 1,
+    maxProblemWeight: 0,
   },
 };
 
