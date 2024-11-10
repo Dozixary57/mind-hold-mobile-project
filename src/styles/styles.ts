@@ -67,7 +67,20 @@ const gStyles = StyleSheet.create({
     // paddingLeft: 6,
   },
 
-
+  modalHeaderBar: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingBottom: 10,
+    marginBottom: 16
+  },
+  modalHeaderBar_text: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
+    paddingLeft: 16,
+  },
 
 });
 

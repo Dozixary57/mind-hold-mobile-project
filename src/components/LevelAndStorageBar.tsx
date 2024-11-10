@@ -3,9 +3,12 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 import { CurrentExperienceLevelCalculate, LevelCalculate, RequiredExperienceLevelCalculate } from '../tools/LevelAndExperienceCalculating';
+import { useNavigation } from '@react-navigation/native';
 
 const LevelAndStorageBar = () => {
   const { values, updateValues, valuesRef } = useGlobalValues();
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     valuesRef.current.core_storage.units = 3;
@@ -64,7 +67,8 @@ const LevelAndStorageBar = () => {
 
         <TouchableOpacity
           style={styles.AppSettings}
-        // onPress={() => navigation.navigate('InventoryScreen')}
+          // @ts-expect-error
+          onPress={() => navigation.navigate('ModalSettingsScreen')}
         >
           <Image
             source={require('../assets/images/SettingsIcon.png')}
