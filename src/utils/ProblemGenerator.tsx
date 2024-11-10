@@ -414,7 +414,7 @@ const ProblemGenerator = () => {
       setShouldUpdateValues(false);
     }
   }, [shouldUpdateValues, problem.reward.neurobits, problem.reward.expirience, updateValues]);
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.problemTitle}>{problem.title}</Text>
@@ -468,8 +468,11 @@ const ProblemGenerator = () => {
         </View>
       </View>
       <View style={styles.separator} />
-      <View style={[styles.holdBarTrack, { height: holdBarHeight }]}>
-        <View style={[styles.holdBarProgress, { width: `${(1 - newWeight / problemWeight) * 100}%` }]} />
+      <View style={[styles.problemBarTrack, { height: holdBarHeight }]}>
+        <View style={[styles.problemBarProgress, { width: `${(1 - newWeight / problemWeight) * 100}%` }]} />
+        <Text style={[styles.problemBarStatus, styles.problemBarStatus_left]}>{problemWeight - newWeight}</Text>
+        <Text style={[styles.problemBarStatus, styles.problemBarStatus_middle]}>{`${Math.round((1 - newWeight / problemWeight) * 100)}%`}</Text>
+        <Text style={[styles.problemBarStatus, styles.problemBarStatus_right]}>{problemWeight}</Text>
       </View>
       {/* <Text style={styles.problemWeight}>Weight: {problemWeight}</Text>
       <Text style={styles.problemWeight}>Current value: {newWeight}</Text> */}
@@ -532,24 +535,39 @@ const styles = StyleSheet.create({
     tintColor: 'white',
   },
 
-  holdBarTrack: {
+  problemBarTrack: {
+    position: 'relative',
     width: '94%',
     borderWidth: 2,
     borderColor: 'white',
     justifyContent: 'center',
     marginVertical: 14,
   },
-  holdBarProgress: {
+  problemBarProgress: {
     backgroundColor: 'white',
     height: '100%',
   },
-  holdBarStatus: {
+  problemBarStatus: {
     position: 'absolute',
-    top: '100%',
+    color: 'black',
+
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 2,
+    textShadowColor: 'white',
+  },
+  problemBarStatus_left: {
+    alignSelf: 'flex-start',
+    paddingLeft: 10,
+    fontSize: 14,
+  },
+  problemBarStatus_middle: {
     alignSelf: 'center',
-    color: 'white',
     fontSize: 18,
-    fontWeight: 'bold',
+  },
+  problemBarStatus_right: {
+    alignSelf: 'flex-end',
+    paddingRight: 10,
+    fontSize: 14,
   },
 
   problemWeight: {

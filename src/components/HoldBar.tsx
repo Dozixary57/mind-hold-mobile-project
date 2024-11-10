@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, PanResponder } from 'react-native';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 import { GetScreenHeight, GetScreenWidth } from '../tools/ScreenWidth';
+import { RemainingTimeFormatter } from '../tools/TimeFormater';
 
 const HoldBar = () => {
   const { values, isHolding, setIsHolding } = useGlobalValues();
@@ -24,35 +25,32 @@ const HoldBar = () => {
       </Text>
       <View
         {...panResponder.panHandlers}
-        style={styles.holdBar}
+        style={styles.holdBarTrack}
       >
         <View
           style={[styles.holdBarProgress, { width: `${(values.hold_bar.progress / values.hold_bar.capacity) * 100}%` }]}
         />
+        <Text style={styles.remainingTimeStatus}>
+          {RemainingTimeFormatter(values.hold_bar.progress / values.hold_bar.dischargingSpeed + values.hold_bar.delayBeforeDischargeCurrentValue)}
+        </Text>
       </View>
-      <Text style={styles.holdBarStatus}>
-        {/* Generating... */}
-        {isHolding ? 'Generating...' : ''}
-      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
     flex: 0,
     display: 'flex',
     backgroundColor: 'transparent',
   },
-  holdBar: {
+  holdBarTrack: {
+    position: 'relative',
     borderWidth: 2,
     borderColor: 'white',
     justifyContent: 'center',
   },
   holdBarUnitRate: {
-    position: 'absolute',
-    bottom: '100%',
     alignSelf: 'center',
     color: 'white',
     fontSize: 18,
@@ -62,13 +60,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: '100%',
   },
-  holdBarStatus: {
+  remainingTimeStatus: {
     position: 'absolute',
-    top: '100%',
     alignSelf: 'center',
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
+
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 2,
+    textShadowColor: 'white',
   },
 });
 

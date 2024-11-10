@@ -7,8 +7,11 @@ export const useGameLoop = () => {
 
   //
   // useEffect(() => {
-  //   valuesRef.current.core_generator.amount = 25;
-  //   valuesRef.current.core_generator.rate = 2;
+  //   valuesRef.current.core_generator.amount = 1;
+  //   valuesRef.current.core_generator.rate = 1;
+  //   valuesRef.current.hold_bar.dischargingSpeed = 1;
+  //   valuesRef.current.hold_bar.capacity = 1;
+  //   valuesRef.current.hold_bar.chargingSpeed = 1;
   // }, [])
   //
 
@@ -34,7 +37,7 @@ export const useGameLoop = () => {
         newValues.hold_bar.delayBeforeDischargeCurrentValue = newValues.hold_bar.delayBeforeDischargeMaxValue;
       } else {
         if (newValues.hold_bar.delayBeforeDischargeCurrentValue > 0) {
-          newValues.hold_bar.delayBeforeDischargeCurrentValue -= newValues.hold_bar.dischargingSpeed * deltaTime;
+          newValues.hold_bar.delayBeforeDischargeCurrentValue -= deltaTime;
         } else {
           newValues.hold_bar.delayBeforeDischargeCurrentValue = 0;
           newProgress -= newValues.hold_bar.dischargingSpeed * deltaTime;
