@@ -6,7 +6,7 @@ import { GetScreenHeight, GetScreenWidth } from '../tools/ScreenWidth';
 import { RemainingTimeFormatter } from '../tools/TimeFormater';
 
 const HoldBar = () => {
-  const { values, isHolding, setIsHolding } = useGlobalValues();
+  const { values, setIsHolding } = useGlobalValues();
 
   const holdBarWidth = GetScreenWidth() * 0.9;
   const holdBarHeight = GetScreenHeight() * 0.08;

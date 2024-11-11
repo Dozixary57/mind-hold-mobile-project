@@ -1,183 +1,9 @@
-// // src\utils\ProblemGenerator.tsx
-// import { View, StyleSheet, Button, Text } from "react-native";
-// import { useGlobalValues } from "../contexts/GlobalValuesContext";
-// import { useState } from "react";
-
-// const ProblemList = {
-//   // creativity
-//   location: [
-//     "В древней крепости Терранос,",
-//     "На далёкой планете Мирра,",
-//     "На берегу озера Вечности,",
-//     "На пустынной равнине Синиль,",
-//     "На вершине горы Этерниа,",
-//     "В подземелье Забвения,"
-//   ],
-//   // ideation
-//   descriptor: [
-//     "окутанной магическими барьерами,",
-//     "где время остановилось,",
-//   "покрытой ледяной коркой,",
-//   "в сердце раскалённых песков,",
-//   "где обитают тени прошлого,",
-//   "полной загадок и опасностей,"
-// ],
-// // analysis
-// event: [
-//   "случился выброс энергии.",
-//   "произошло странное свечение.",
-//   "раздался таинственный шум.",
-//   "появился мистический знак.",
-//   "упал метеорит из далёкой галактики.",
-//   "вспыхнуло пламя неизвестного происхождения."
-// ],
-// // intuition
-// character: [
-//   "Одинокий странник,",
-//   "Могущественный маг,",
-//   "Исследователь временных пространств,",
-//   "Посланник древних цивилизаций,",
-//   "Спаситель из будущего,",
-//   "Призрак прошлого,"
-// ],
-// // logic
-// emotion: [
-//   "исполненный решимости,",
-//   "поглощённый страхом,",
-//   "пылающий от любопытства,",
-//   "переполненный печалью,",
-//   "охваченный энтузиазмом,",
-//   "в поисках надежды,"
-// ],
-// // analysis
-// subject: [
-//   "ищет источник силы,",
-//   "пытается разгадать древнюю тайну,",
-//   "открывает путь в неизведанное,",
-//   "ищет способ спасти мир,",
-//   "готовится к финальному бою,",
-//   "стремится разгадать загадку,"
-// ],
-// // creativity
-// extra: [
-//   "которая изменит судьбу всех,",
-//   "связанную с его прошлым.",
-//   "ведущую к запретному знанию.",
-//   "оставшуюся неразгаданной веками.",
-//   "которая принадлежала его предкам.",
-//   "запечатанную в древних манускриптах."
-// ],
-// // logic
-// action: [
-//   "Нужно собрать артефакты и",
-//   "Следует отправиться в поход и",
-//   "Важно подготовиться к опасностям и",
-//   "Необходимо найти союзников и",
-//   "Пора снарядить экспедицию и",
-//   "Следует разыскать старинные записи и"
-// ],
-// // ideation
-// objective: [
-//   "добраться до истины.",
-//   "получить ответы.",
-//   "восстановить равновесие.",
-//   "вернуть утраченное время.",
-//   "переписать ход истории.",
-//   "найти способ спасения."
-// ],
-// // intuition
-// outcome: [
-//   "Это событие изменит мир навсегда.",
-//   "Так начнётся новая эра.",
-//   "Это станет началом великой легенды.",
-//   "Мир уже никогда не будет прежним.",
-//   "Это приведёт к невообразимым последствиям.",
-//   "Судьба вселенной висит на волоске."
-// ],
-// };
-
-// interface IProblem {
-//   title: string;
-//   description: string;
-//   parameters: {
-//     analysis: number;
-//     logic: number;
-//     intuition: number;
-//     creativity: number;
-//     ideation: number;
-//   }
-//   weight: number;
-//   reward: {
-//     expirience: number;
-//     neurobits: number;
-//   }
-// }
-
-// const generateProblem = (): string => {
-//   const getRandomElement = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-//   return Object.values(ProblemList).map(getRandomElement).join(' ');
-// };
-
-// const generateProblemNumber = (): number => Math.floor(1 + Math.random() * 99999);
-
-// const ProblemGenerator = () => {
-//   const [problem, setProblem] = useState<string>(generateProblem());
-//   const [problemNumber, setProblemNumber] = useState<number>(generateProblemNumber());
-
-//   const handleGenerateNewProblem = () => {
-//     setProblem(generateProblem());
-//     setProblemNumber(generateProblemNumber());
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.problemTitle}>Проблема #{problemNumber}</Text>
-//       <View style={styles.problemTextContainer}>
-//         <Text style={styles.problemText}>{problem}</Text>
-//       </View>
-//       <Button title="Сгенерировать новую проблему" onPress={handleGenerateNewProblem} />
-//     </View>
-//   );
-// };
-
-// export default ProblemGenerator;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     width: '80%',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     borderWidth: 2,
-//     borderColor: 'white',
-//     backgroundColor: 'black'
-//   },
-//   problemTitle: {
-//     alignSelf: 'flex-start',
-//     fontSize: 20,
-//     color: 'white',
-//     fontWeight: 'bold',
-//     paddingVertical: 5,
-//     paddingLeft: 7,
-//   },
-//   problemTextContainer: {
-//     width: '100%',
-//     borderTopWidth: 2,
-//     borderTopColor: 'white',
-//     borderBottomWidth: 2,
-//     borderBottomColor: 'white',
-//   },
-//   problemText: {
-//     textAlign: 'justify',
-//     fontSize: 14,
-//     color: 'white',
-//     padding: 8,
-//   }
-// });
-
-import { View, StyleSheet, Button, Text, Image } from "react-native";
+// src\utils\ProblemGenerator.tsx
+import { View, StyleSheet, Text, Image } from "react-native";
 import { IGlobalValues, useGlobalValues } from "../contexts/GlobalValuesContext";
-import { useEffect, useRef, useState } from "react";
-import { GetScreenHeight, GetScreenWidth } from "../tools/ScreenWidth";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { GetScreenHeight } from "../tools/ScreenWidth";
+import { RoundToTwoDecimals } from "../tools/NumbersFormater";
 
 const ProblemList = {
   location: [
@@ -344,21 +170,40 @@ const generateProblem = (): IProblem => {
 
 const generateProblemNumber = (): string => String(Math.floor(1 + Math.random() * 99999)).padStart(5, '0');
 
-const ProblemGenerator = () => {
+const ProblemGenerator = forwardRef((props, ref) => {
   const holdBarHeight = GetScreenHeight() * 0.05;
-  const { updateValues, valuesRef, isActive } = useGlobalValues();
+  const { updateValues, valuesRef, isActive, resetProblemRef } = useGlobalValues();
   const [problem, setProblem] = useState(generateProblem());
   const [problemWeight, setProblemWeight] = useState(() => calculateProblemWeightOnParameters(problem, valuesRef.current));
   const [newWeight, setNewWeight] = useState(problemWeight);
   const [shouldUpdateValues, setShouldUpdateValues] = useState(false);
 
+  const resetProblem = () => {
+    const newProblem = generateProblem();
+    setProblem(newProblem);
+    const newProblemWeight = calculateProblemWeightOnParameters(newProblem, valuesRef.current);
+    setNewWeight(newProblemWeight);
+    setProblemWeight(newProblemWeight);
+  };
+
+  useImperativeHandle(ref, () => ({
+    resetProblem
+  }));
+
+  useEffect(() => {
+    resetProblemRef.current = resetProblem;
+
+    return () => {
+      resetProblemRef.current = null;
+    };
+  }, []);
+
   useEffect(() => {
     const calculateCurrentWeight = () => {
       setNewWeight((prevWeight) => {
-        const updatedWeight = prevWeight - valuesRef.current.core_generator.rate * valuesRef.current.core_generator.amount;
+        const updatedWeight = RoundToTwoDecimals(prevWeight - valuesRef.current.core_generator.rate * valuesRef.current.core_generator.amount);
 
         if (updatedWeight <= 0) {
-          // console.log("Problem solved. Generating new problem...");
           const newProblem = generateProblem();
           setProblem(newProblem);
 
@@ -414,7 +259,7 @@ const ProblemGenerator = () => {
       setShouldUpdateValues(false);
     }
   }, [shouldUpdateValues, problem.reward.neurobits, problem.reward.expirience, updateValues]);
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.problemTitle}>{problem.title}</Text>
@@ -470,16 +315,13 @@ const ProblemGenerator = () => {
       <View style={styles.separator} />
       <View style={[styles.problemBarTrack, { height: holdBarHeight }]}>
         <View style={[styles.problemBarProgress, { width: `${(1 - newWeight / problemWeight) * 100}%` }]} />
-        <Text style={[styles.problemBarStatus, styles.problemBarStatus_left]}>{problemWeight - newWeight}</Text>
+        <Text style={[styles.problemBarStatus, styles.problemBarStatus_left]}>{RoundToTwoDecimals(problemWeight - newWeight)}</Text>
         <Text style={[styles.problemBarStatus, styles.problemBarStatus_middle]}>{`${Math.round((1 - newWeight / problemWeight) * 100)}%`}</Text>
         <Text style={[styles.problemBarStatus, styles.problemBarStatus_right]}>{problemWeight}</Text>
       </View>
-      {/* <Text style={styles.problemWeight}>Weight: {problemWeight}</Text>
-      <Text style={styles.problemWeight}>Current value: {newWeight}</Text> */}
-      {/* <Text style={styles.problemWeight}>{isActiveRef.current ? 'Active' : 'Inactive'}</Text> */}
     </View>
   );
-};
+});
 
 export default ProblemGenerator;
 

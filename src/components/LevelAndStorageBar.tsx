@@ -1,19 +1,14 @@
 // src\components\LevelBar.tsx
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 import { CurrentExperienceLevelCalculate, LevelCalculate, RequiredExperienceLevelCalculate } from '../tools/LevelAndExperienceCalculating';
 import { useNavigation } from '@react-navigation/native';
 
 const LevelAndStorageBar = () => {
-  const { values, updateValues, valuesRef } = useGlobalValues();
+  const { values } = useGlobalValues();
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    valuesRef.current.core_storage.units = 3;
-    valuesRef.current.lvl_experience = 9;
-  }, []);
 
   return (
     <View style={styles.Component}>
@@ -183,8 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     transform: [{ scale: 1.4 }, { translateY: -0.1 }]
   },
-  // LevelTextPadding: {
-  // },
   LevelTrack: {
     position: 'relative',
     flex: 1,

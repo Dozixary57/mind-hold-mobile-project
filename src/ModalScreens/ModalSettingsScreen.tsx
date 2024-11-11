@@ -1,10 +1,30 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import gStyles from '../styles/styles';
+import { useGlobalValues } from '../contexts/GlobalValuesContext';
 
 const ModalSettingsScreen = () => {
+  const { resetAppData } = useGlobalValues();
   const navigation = useNavigation();
+
+  const confirmReset = () => {
+    Alert.alert(
+      'Confirm Reset',
+      'Are you sure you want to reset your game progress? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Reset',
+          onPress: resetAppData,
+          style: 'destructive',
+        },
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -12,14 +32,21 @@ const ModalSettingsScreen = () => {
         <Text style={gStyles.modalHeaderBar_text}>❮</Text>
         <Text style={gStyles.modalHeaderBar_text}>Settings</Text>
       </TouchableOpacity>
+      
       <TouchableOpacity
-      style={styles.button}
-      // @ts-expect-error
-      onPress={() => navigation.navigate('ModalDocumentationScreen')}
+        style={styles.button}
+        // @ts-expect-error
+        onPress={() => navigation.navigate('ModalDocumentationScreen')}
       >
         <Text style={styles.text}>Open documentation</Text>
       </TouchableOpacity>
-      
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={confirmReset}
+      >
+        <Text style={styles.text}>Reset progress</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -34,7 +61,6 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 20,
-    
   },
 
   button: {
@@ -43,6 +69,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     alignItems: 'center',
+    marginVertical: 10,
   },
 });
 

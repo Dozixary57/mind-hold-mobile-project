@@ -19,14 +19,6 @@ const gStyles = StyleSheet.create({
     color: 'white',
   },
 
-  // simpleHeader: {
-  //   color: 'white',
-  //   fontSize: 18,
-  //   fontWeight: 'bold',
-  //   textAlign: 'center',
-  //   paddingVertical: 6,
-  // },
-
   bigHeader: {
     color: 'white',
     fontSize: 22,
@@ -56,7 +48,6 @@ const gStyles = StyleSheet.create({
     width: '85%',
     borderBottomColor: 'white',
     borderBottomWidth: 3,
-    // alignSelf: 'center',
   },
   subsectionTitleSeparator_text:
   {
@@ -64,7 +55,6 @@ const gStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'left',
-    // paddingLeft: 6,
   },
 
   modalHeaderBar: {

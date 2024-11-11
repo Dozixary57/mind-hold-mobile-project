@@ -54,11 +54,13 @@ export interface GlobalValuesContextProps {
   valuesRef: React.MutableRefObject<IGlobalValues>;
   updateValues: (newValues: Partial<IGlobalValues>) => void;
   saveAppData: () => void;
+  resetAppData: () => void;
   isHolding: boolean;
   setIsHolding: React.Dispatch<React.SetStateAction<boolean>>;
   isHoldingRef: React.MutableRefObject<boolean>;
   isActive: boolean;
   isActiveRef: React.MutableRefObject<boolean>;
+  resetProblemRef: React.MutableRefObject<(() => void) | null>;
 }
 
 const GlobalValuesContext = createContext<GlobalValuesContextProps | undefined>(undefined);
@@ -78,20 +80,20 @@ const initialValues: IGlobalValues = {
   lvl_experience: 0,
   hold_bar: {
     progress: 0,
-    capacity: 10,
+    capacity: 1,
     chargingSpeed: 1,
     dischargingSpeed: 1,
     delayBeforeDischargeCurrentValue: 0,
-    delayBeforeDischargeMaxValue: 3,
+    delayBeforeDischargeMaxValue: 0,
     isFreezed: false,
   },
   core_generator: {
     rate: 1,
-    amount: 0.15,
+    amount: 1,
     isFreezed: false,
   },
   core_storage: {
-    capacity: 5,
+    capacity: 1,
     units: 0,
   },
   core_parameters: {
@@ -124,6 +126,8 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
 
   const isActive = values.hold_bar.progress > 0;
   const isActiveRef = useRef(isActive);
+
+  const resetProblemRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     isActiveRef.current = isActive;
@@ -168,17 +172,32 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
     valuesRef.current = updatedValues;
   }, [values]);
 
+  const resetAppData = useCallback(() => {
+    setValues(initialValues);
+    valuesRef.current = initialValues;
+  
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(initialValues)).catch((e) => {
+      console.error('Failed to reset values to storage', e);
+    });
+
+    if (resetProblemRef.current) {
+      resetProblemRef.current();
+    }
+  }, []);
+  
   return (
     <GlobalValuesContext.Provider value={{
       values,
       valuesRef,
       updateValues,
       saveAppData,
+      resetAppData,
       isHolding,
       setIsHolding,
       isHoldingRef,
       isActive,
       isActiveRef,
+      resetProblemRef,
     }}>
       {children}
     </GlobalValuesContext.Provider>
