@@ -4,10 +4,7 @@ export const DocAPI = 'https://dozixary57.github.io/hold-mind-documentation';
 
 const ServiceAPI = {
   // AUTHORIZATION
-  signup: async () => {
-    // ...
-  },
-  login: async () => {
+  GoogleAuthorization: async () => {
     // ...
   },
 

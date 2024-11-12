@@ -42,7 +42,8 @@ export interface IGlobalValues {
     maxProblemCreativityParameter: number;
     maxProblemIdeationParameter: number;
     maxProblemWeight: number;
-  }
+  },
+  user_data: any;
 }
 
 interface GlobalValuesProviderProps {
@@ -114,6 +115,7 @@ const initialValues: IGlobalValues = {
     maxProblemIdeationParameter: 1,
     maxProblemWeight: 0,
   },
+  user_data: {},
 };
 
 const STORAGE_KEY = 'globalValues';

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import gStyles from '../styles/styles';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ModalSettingsScreen = () => {
   const { resetAppData } = useGlobalValues();
@@ -32,21 +33,33 @@ const ModalSettingsScreen = () => {
         <Text style={gStyles.modalHeaderBar_text}>❮</Text>
         <Text style={gStyles.modalHeaderBar_text}>Settings</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity
-        style={styles.button}
-        // @ts-expect-error
-        onPress={() => navigation.navigate('ModalDocumentationScreen')}
-      >
-        <Text style={styles.text}>Open documentation</Text>
-      </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={confirmReset}
-      >
-        <Text style={styles.text}>Reset progress</Text>
-      </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => { }}
+          >
+            <Text style={styles.text}>Google OAuth</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={styles.button}
+          // @ts-expect-error
+          onPress={() => navigation.navigate('ModalDocumentationScreen')}
+        >
+          <Text style={styles.text}>Open documentation</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={confirmReset}
+        >
+          <Text style={styles.text}>Reset progress</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
@@ -58,7 +71,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 
+  scrollView: {
+    flex: 1,
+    alignItems: 'center',
+    // justifyContent: 'flex-start',
+  },
+
   text: {
+    textAlign: 'center',
     color: 'white',
     fontSize: 20,
   },
