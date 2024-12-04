@@ -1,9 +1,9 @@
 // src\utils\ProblemGenerator.tsx
 import { View, StyleSheet, Text, Image } from "react-native";
 import { IGlobalValues, useGlobalValues } from "../contexts/GlobalValuesContext";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { GetScreenHeight } from "../tools/ScreenWidth";
-import { RoundToTwoDecimals } from "../tools/NumbersFormater";
+import { RoundToInteger, RoundToTwoDecimals, RoundUpToInteger } from "../tools/NumbersFormater";
 
 const ProblemList = {
   location: [
@@ -135,7 +135,7 @@ const calculateProblemWeightOnParameters = (problemValue: IProblem, userValue: I
   return Math.round(calculatedWeight);
 };
 
-const generateProblem = (): IProblem => {
+const generateProblem = (valuesRef: IGlobalValues): IProblem => {
   const getRandomElement = (arr: { text: string; weight: number }[]) => arr[Math.floor(Math.random() * arr.length)];
   const location = getRandomElement(ProblemList.location);
   const descriptor = getRandomElement(ProblemList.descriptor);
@@ -148,21 +148,31 @@ const generateProblem = (): IProblem => {
   const objective = getRandomElement(ProblemList.objective);
   const outcome = getRandomElement(ProblemList.outcome);
 
-  const problemParameters = {
-    analysis: event.weight + subject.weight,
-    logic: emotion.weight + action.weight,
-    intuition: character.weight + outcome.weight,
-    creativity: location.weight + extra.weight,
-    ideation: descriptor.weight + objective.weight,
+  let problemParameters = {
+    analysis: 1,
+    logic: 1,
+    intuition: 1,
+    creativity: 1,
+    ideation: 1,
   };
+
+  if (valuesRef.characteristic_coefficients && valuesRef.game_difficult_coef) {
+    problemParameters = {
+      analysis: RoundUpToInteger(((event.weight + subject.weight) / 10) * valuesRef.game_difficult_coef / valuesRef.characteristic_coefficients.problemParameterCoef),
+      logic: RoundUpToInteger(((emotion.weight + action.weight) / 10) * valuesRef.game_difficult_coef / valuesRef.characteristic_coefficients.problemParameterCoef),
+      intuition: RoundUpToInteger(((character.weight + outcome.weight) / 10) * valuesRef.game_difficult_coef / valuesRef.characteristic_coefficients.problemParameterCoef),
+      creativity: RoundUpToInteger(((location.weight + extra.weight) / 10) * valuesRef.game_difficult_coef / valuesRef.characteristic_coefficients.problemParameterCoef),
+      ideation: RoundUpToInteger(((descriptor.weight + objective.weight) / 10) * valuesRef.game_difficult_coef / valuesRef.characteristic_coefficients.problemParameterCoef),
+    };
+  }
 
   return {
     title: `Проблема #${generateProblemNumber()}`,
     description: `${location.text} ${descriptor.text} ${event.text} ${character.text} ${emotion.text} ${subject.text} ${extra.text} ${action.text} ${objective.text} ${outcome.text}`,
     parameters: problemParameters,
-    weight: 100,
+    weight: valuesRef.characteristic_coefficients.problemWeightCoef ? RoundToInteger(10 * valuesRef.characteristic_coefficients.problemWeightCoef) : 1,
     reward: {
-      expirience: Math.floor(1 + Math.random() * 10),
+      expirience: 1,
       neurobits: 1,
     }
   };
@@ -173,13 +183,13 @@ const generateProblemNumber = (): string => String(Math.floor(1 + Math.random() 
 const ProblemGenerator = forwardRef((props, ref) => {
   const holdBarHeight = GetScreenHeight() * 0.05;
   const { updateValues, valuesRef, isActive, resetProblemRef } = useGlobalValues();
-  const [problem, setProblem] = useState(generateProblem());
+  const [problem, setProblem] = useState(generateProblem(valuesRef.current));
   const [problemWeight, setProblemWeight] = useState(() => calculateProblemWeightOnParameters(problem, valuesRef.current));
   const [newWeight, setNewWeight] = useState(problemWeight);
   const [shouldUpdateValues, setShouldUpdateValues] = useState(false);
 
   const resetProblem = () => {
-    const newProblem = generateProblem();
+    const newProblem = generateProblem(valuesRef.current);
     setProblem(newProblem);
     const newProblemWeight = calculateProblemWeightOnParameters(newProblem, valuesRef.current);
     setNewWeight(newProblemWeight);
@@ -204,7 +214,7 @@ const ProblemGenerator = forwardRef((props, ref) => {
         const updatedWeight = RoundToTwoDecimals(prevWeight - valuesRef.current.core_generator.rate * valuesRef.current.core_generator.amount);
 
         if (updatedWeight <= 0) {
-          const newProblem = generateProblem();
+          const newProblem = generateProblem(valuesRef.current);
           setProblem(newProblem);
 
           setShouldUpdateValues(true);

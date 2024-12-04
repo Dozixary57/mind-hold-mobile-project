@@ -1,3 +1,5 @@
+import { RoundToTwoDecimals } from "./NumbersFormater";
+
 const LevelTable = {
   1: 10, // 10
   2: 15, // 25
@@ -36,20 +38,6 @@ const RequiredExperienceLevelCalculate = (experience: number) => {
   const levelUpRequiredExperience = Object.entries(LevelTable).find(([lvl]) => Number(lvl) === currentLevel);
 
   return levelUpRequiredExperience ? Number(levelUpRequiredExperience[1]) : -1;
-
-  // const nextLevel = currentLevel + 1;
-  // if (!(nextLevel in LevelTable))
-  //   return -1;
-
-  // const sumPreviousLevels = Object.entries(LevelTable)
-  //   .filter(([lvl]) => Number(lvl) <= currentLevel)
-  //   .reduce((acc, [, exp]) => acc + Number(exp), 0);
-
-  // const sumCurrentAndPreviousLevels = Object.entries(LevelTable)
-  //   .filter(([lvl]) => Number(lvl) <= currentLevel + 1)
-  //   .reduce((acc, [, exp]) => acc + Number(exp), 0);
-
-  // return sumCurrentAndPreviousLevels - sumPreviousLevels;
 };
 
 const CurrentExperienceLevelCalculate = (experience: number) => {
@@ -57,32 +45,37 @@ const CurrentExperienceLevelCalculate = (experience: number) => {
 
   if (currentLevel === -1)
     return -1;
- 
+
   const sumPreviousLevels = Object.entries(LevelTable)
-  .filter(([lvl]) => Number(lvl) < currentLevel)
-  .reduce((acc, [, exp]) => acc + Number(exp), 0);
+    .filter(([lvl]) => Number(lvl) < currentLevel)
+    .reduce((acc, [, exp]) => acc + Number(exp), 0);
 
   return experience - sumPreviousLevels;
 }
 
+const MaxExperienceForMaxLevel = () => {
+  const totalRequiredExperience = Object.values(LevelTable).reduce(
+    (acc, requiredExp) => acc + requiredExp,
+    0
+  );
 
-// const RequiredExperienceCalculate = (experience: number) => {
-//   const level = LevelCalculate(experience);
+  return totalRequiredExperience;
+};
 
-//   const requiredExperience = Object.values(LevelTable).reduce((acc, curr) => {
-//     if (typeof(level) === 'number' && level  > 1) {
-//       acc += curr;
-//     } else {
-//       acc += curr;
-//     }
-//     return acc;
-//   }, 0);
+const GameDifficultCoefCalculate = (level_experience: number): number => {
+  const maxExperience = MaxExperienceForMaxLevel();
+  const normalizedExperience = level_experience / maxExperience; // Normalize the experience value to the range [0, 1]
+  const growthFactor = 50; // Adjust for a balanced exponential growth
 
-//   return requiredExperience;    
-// }
+  // Combine linear and exponential components for a more gradual increase
+  const difficultyCoefficient = 1 + (normalizedExperience * growthFactor) + (Math.exp(growthFactor * normalizedExperience) - 1) * 0.25;
+
+  return RoundToTwoDecimals(difficultyCoefficient);
+};
 
 export {
   LevelCalculate,
   CurrentExperienceLevelCalculate,
   RequiredExperienceLevelCalculate,
+  GameDifficultCoefCalculate,
 };

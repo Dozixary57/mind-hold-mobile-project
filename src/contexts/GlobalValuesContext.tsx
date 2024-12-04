@@ -7,6 +7,7 @@ export interface IGlobalValues {
     lastActiveTime: number;
   };
   lvl_experience: number;
+  game_difficult_coef: number;
   hold_bar: {
     progress: number;
     capacity: number;
@@ -42,8 +43,13 @@ export interface IGlobalValues {
     maxProblemCreativityParameter: number;
     maxProblemIdeationParameter: number;
     maxProblemWeight: number;
-  },
-  user_data: any;
+  };
+  characteristic_coefficients: {
+    problemParameterCoef: number;
+    problemWeightCoef: number;
+    problemGainedExperienceCoef: number;
+    problemGainedNeurobitsCoef: number;
+  };
 }
 
 interface GlobalValuesProviderProps {
@@ -54,13 +60,16 @@ export interface GlobalValuesContextProps {
   values: IGlobalValues;
   valuesRef: React.MutableRefObject<IGlobalValues>;
   updateValues: (newValues: Partial<IGlobalValues>) => void;
+  progress: number;
+  updateProgress: (newValues: number) => void;
+  progressRef: React.MutableRefObject<number>;
   saveAppData: () => void;
   resetAppData: () => void;
   isHolding: boolean;
   setIsHolding: React.Dispatch<React.SetStateAction<boolean>>;
   isHoldingRef: React.MutableRefObject<boolean>;
   isActive: boolean;
-  isActiveRef: React.MutableRefObject<boolean>;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   resetProblemRef: React.MutableRefObject<(() => void) | null>;
 }
 
@@ -75,10 +84,9 @@ export const useGlobalValues = () => {
 };
 
 const initialValues: IGlobalValues = {
-  app: {
-    lastActiveTime: 0,
-  },
+  app: { lastActiveTime: 0 },
   lvl_experience: 0,
+  game_difficult_coef: 1,
   hold_bar: {
     progress: 0,
     capacity: 1,
@@ -88,15 +96,8 @@ const initialValues: IGlobalValues = {
     delayBeforeDischargeMaxValue: 0,
     isFreezed: false,
   },
-  core_generator: {
-    rate: 1,
-    amount: 1,
-    isFreezed: false,
-  },
-  core_storage: {
-    capacity: 1,
-    units: 0,
-  },
+  core_generator: { rate: 1, amount: 1, isFreezed: false },
+  core_storage: { capacity: 1, units: 0 },
   core_parameters: {
     analysis: 1,
     logic: 1,
@@ -115,34 +116,65 @@ const initialValues: IGlobalValues = {
     maxProblemIdeationParameter: 1,
     maxProblemWeight: 0,
   },
-  user_data: {},
+  characteristic_coefficients: {
+    problemParameterCoef: 1,
+    problemWeightCoef: 1,
+    problemGainedExperienceCoef: 1,
+    problemGainedNeurobitsCoef: 1,
+  },
 };
 
 const STORAGE_KEY = 'globalValues';
 
 export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ children }) => {
   const [values, setValues] = useState<IGlobalValues>(initialValues);
-  const valuesRef = useRef(values);
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(progress);
+  const valuesRef = useRef(initialValues);
   const [isHolding, setIsHolding] = useState(false);
   const isHoldingRef = useRef(isHolding);
-
-  const isActive = values.hold_bar.progress > 0;
-  const isActiveRef = useRef(isActive);
-
+  const [isActive, setIsActive] = useState<boolean>(values.hold_bar.progress > 0);
   const resetProblemRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    isActiveRef.current = isActive;
-  }, [isActive]);
+    progressRef.current = progress;
+  }, [progress]);
 
+  const updateProgress = useCallback((newValues: number) => {
+    setProgress(() => {
+      progressRef.current = newValues;
+      return newValues;
+    });
+  }, []);
+
+  useEffect(() => {
+    valuesRef.current = values;
+  }, [values]);
+
+  useEffect(() => {
+    isHoldingRef.current = isHolding;
+  }, [isHolding]);
+
+  useEffect(() => {
+    const delay = setInterval(() => {
+      setIsActive(progress > 0);
+    }, 10);
+
+    return () => {
+      clearInterval(delay);
+    };
+  }, [progress]);
+    
   useEffect(() => {
     const loadValues = async () => {
       try {
         const storedValues = await AsyncStorage.getItem(STORAGE_KEY);
         if (storedValues) {
           const parsedValues = JSON.parse(storedValues);
-          setValues(parsedValues);
-          valuesRef.current = parsedValues;
+          setValues((prevValues) => ({
+            ...prevValues,
+            ...parsedValues,
+          }));
         }
       } catch (e) {
         console.error('Failed to load values from storage', e);
@@ -153,54 +185,58 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
   }, []);
 
   const updateValues = useCallback((newValues: Partial<IGlobalValues>) => {
-    setValues((prevValues) => {
+    setValues((prevValues: IGlobalValues) => {
       const updatedValues = { ...prevValues, ...newValues };
-
-      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) => {
-        console.error('Failed to save values to storage', e);
-      });
-
       valuesRef.current = updatedValues;
+
       return updatedValues;
     });
   }, []);
 
   const saveAppData = useCallback(() => {
-    const updatedValues = { ...values, app: { ...values.app, lastActiveTime: Date.now() } };
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) => {
-      console.error('Failed to save values to storage', e);
+    const updatedValues = {
+      ...valuesRef.current,
+      app: { 
+        ...valuesRef.current.app, 
+        lastActiveTime: Date.now() 
+      },
+    };
+
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) =>
+      console.error('Failed to save values to storage', e)
+    ).finally(() => {
+      valuesRef.current = updatedValues;
     });
-    setValues(updatedValues);
-    valuesRef.current = updatedValues;
-  }, [values]);
+  }, []);
 
   const resetAppData = useCallback(() => {
     setValues(initialValues);
     valuesRef.current = initialValues;
-  
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(initialValues)).catch((e) => {
-      console.error('Failed to reset values to storage', e);
-    });
-
-    if (resetProblemRef.current) {
-      resetProblemRef.current();
-    }
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(initialValues)).catch((e) =>
+      console.error('Failed to reset values to storage', e)
+    );
+    resetProblemRef.current?.();
   }, []);
-  
+
   return (
-    <GlobalValuesContext.Provider value={{
-      values,
-      valuesRef,
-      updateValues,
-      saveAppData,
-      resetAppData,
-      isHolding,
-      setIsHolding,
-      isHoldingRef,
-      isActive,
-      isActiveRef,
-      resetProblemRef,
-    }}>
+    <GlobalValuesContext.Provider
+      value={{
+        values,
+        valuesRef,
+        updateValues,
+        progress,
+        updateProgress,
+        progressRef,
+        saveAppData,
+        resetAppData,
+        isHolding,
+        setIsHolding,
+        isHoldingRef,
+        isActive,
+        setIsActive,
+        resetProblemRef,
+      }}
+    >
       {children}
     </GlobalValuesContext.Provider>
   );

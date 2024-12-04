@@ -1,10 +1,10 @@
 // src/screens/MainScreen.tsx
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import HoldBar from "../components/HoldBar";
-import DebugPanel from "../tools/DebugPanel";
+// import DebugPanel from "../tools/DebugPanel";
 import gStyles from "../styles/styles";
-import LevelAndStorageBar from "../components/LevelAndStorageBar";
+import { LevelAndStorageBar } from "../components/LevelAndStorageBar";
 import ProblemGenerator from "../utils/ProblemGenerator";
 
 const HomeScreen = () => {

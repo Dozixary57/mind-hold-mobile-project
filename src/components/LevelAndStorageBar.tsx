@@ -4,11 +4,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 import { CurrentExperienceLevelCalculate, LevelCalculate, RequiredExperienceLevelCalculate } from '../tools/LevelAndExperienceCalculating';
 import { useNavigation } from '@react-navigation/native';
+import { IStackParamList } from '../interfaces/INavigationParamList';
+import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/commonjs/src/types';
 
 const LevelAndStorageBar = () => {
   const { values } = useGlobalValues();
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<IStackParamList>>();
 
   return (
     <View style={styles.Component}>
@@ -62,8 +64,7 @@ const LevelAndStorageBar = () => {
 
         <TouchableOpacity
           style={styles.AppSettings}
-          // @ts-expect-error
-          onPress={() => navigation.navigate('ModalSettingsScreen')}
+          onPress={() => navigation.navigate('Settings')}
         >
           <Image
             source={require('../assets/images/SettingsIcon.png')}
@@ -123,7 +124,81 @@ const LevelAndStorageBar = () => {
   );
 };
 
-export default LevelAndStorageBar;
+const LevelAndStorageBar_Minimalized = () => {
+  const { values } = useGlobalValues();
+
+  return (
+    <View style={styles.Component}>
+      <View style={styles.LevelBar}>
+        <Text style={styles.Header}>
+          lvl  {LevelCalculate(values.lvl_experience) < 0 ? '∞' : LevelCalculate(values.lvl_experience)}
+        </Text>
+        <View style={styles.StorageTrack_Minimalized}>
+          <View style={[styles.Progress, { width: `${values.core_storage.units / values.core_storage.capacity * 100}%` }]} />
+          <View style={styles.StorageTextWithIcon}>
+            <Image source={require('../assets/images/NeurobitsIcon.png')} style={styles.StorageIcon} />
+            <Text style={[styles.TextOfBar, styles.StorageTextSize]}>
+              Neurobits
+            </Text>
+          </View>
+          <Text style={[styles.TextOfBar, styles.StorageTextSize]}>
+            {values.core_storage.units} / {values.core_storage.capacity}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.CoreParameterIndicators_Minimalized}>
+        <View style={styles.CoreParameter_Minimalized}>
+          <Text style={styles.CoreParameterText_Minimalized}>
+            {values.core_parameters.analysis}
+          </Text>
+          <Image
+            source={require('../assets/images/AnalysisIcon.png')}
+            style={styles.CoreParameterIcon_Minimalized}
+          />
+        </View>
+        <View style={styles.CoreParameter_Minimalized}>
+          <Text style={styles.CoreParameterText_Minimalized}>
+            {values.core_parameters.logic}
+          </Text>
+          <Image
+            source={require('../assets/images/LogicIcon.png')}
+            style={styles.CoreParameterIcon_Minimalized}
+          />
+        </View>
+        <View style={styles.CoreParameter_Minimalized}>
+          <Text style={styles.CoreParameterText_Minimalized}>
+            {values.core_parameters.intuition}
+          </Text>
+          <Image
+            source={require('../assets/images/IntuitionIcon.png')}
+            style={styles.CoreParameterIcon_Minimalized}
+          />
+        </View>
+        <View style={styles.CoreParameter_Minimalized}>
+          <Text style={styles.CoreParameterText_Minimalized}>
+            {values.core_parameters.creativity}
+          </Text>
+          <Image
+            source={require('../assets/images/CreativityIcon.png')}
+            style={styles.CoreParameterIcon_Minimalized}
+          />
+        </View>
+        <View style={styles.CoreParameter_Minimalized}>
+          <Text style={styles.CoreParameterText_Minimalized}>
+            {values.core_parameters.ideation}
+          </Text>
+          <Image
+            source={require('../assets/images/IdeationIcon.png')}
+            style={styles.CoreParameterIcon_Minimalized}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+export { LevelAndStorageBar, LevelAndStorageBar_Minimalized };
 
 const styles = StyleSheet.create({
   Component: {
@@ -265,6 +340,42 @@ const styles = StyleSheet.create({
   CoreParameterIcon: {
     width: 27,
     height: 27,
+    tintColor: 'white',
+  },
+
+
+  StorageTrack_Minimalized: {
+    position: 'relative',
+    flex: 1,
+    height: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 4,
+    color: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
+  },
+  CoreParameterIndicators_Minimalized: {
+    width: '100%',
+    marginTop: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  CoreParameter_Minimalized: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  CoreParameterText_Minimalized: {
+    color: 'white',
+    fontWeight: 'bold',
+    paddingRight: 2,
+  },
+  CoreParameterIcon_Minimalized: {
+    width: 22,
+    height: 22,
     tintColor: 'white',
   },
 });

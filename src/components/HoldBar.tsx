@@ -1,21 +1,35 @@
-// src\components\HoldBar.tsx
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet, PanResponder } from 'react-native';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 import { GetScreenHeight, GetScreenWidth } from '../tools/ScreenWidth';
 import { RemainingTimeFormatter } from '../tools/TimeFormater';
 
 const HoldBar = () => {
-  const { values, setIsHolding } = useGlobalValues();
+  const { values, setIsHolding, isHoldingRef, progress } = useGlobalValues();
 
   const holdBarWidth = GetScreenWidth() * 0.9;
   const holdBarHeight = GetScreenHeight() * 0.08;
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => setIsHolding(true),
-    onPanResponderRelease: () => setIsHolding(false),
-    onPanResponderTerminate: () => setIsHolding(false),
+    onPanResponderGrant: () => {
+      if (!isHoldingRef.current) {
+        isHoldingRef.current = true;
+        setIsHolding(true);
+      }
+    },
+    onPanResponderRelease: () => {
+      if (isHoldingRef.current) {
+        isHoldingRef.current = false;
+        setIsHolding(false);
+      }
+    },
+    onPanResponderTerminate: () => {
+      if (isHoldingRef.current) {
+        isHoldingRef.current = false;
+        setIsHolding(false);
+      }
+    },
   });
 
   return (
@@ -28,10 +42,9 @@ const HoldBar = () => {
         style={styles.holdBarTrack}
       >
         <View
-          style={[styles.holdBarProgress, { width: `${(values.hold_bar.progress / values.hold_bar.capacity) * 100}%` }]}
-        />
+          style={[styles.holdBarProgress, { width: `${(progress / values.hold_bar.capacity) * 100}%` }]}/>
         <Text style={styles.remainingTimeStatus}>
-          {RemainingTimeFormatter(values.hold_bar.progress / values.hold_bar.dischargingSpeed + values.hold_bar.delayBeforeDischargeCurrentValue)}
+          {RemainingTimeFormatter(progress / values.hold_bar.dischargingSpeed + values.hold_bar.delayBeforeDischargeCurrentValue)}
         </Text>
       </View>
     </View>
@@ -66,7 +79,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
-
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 2,
     textShadowColor: 'white',

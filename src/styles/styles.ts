@@ -6,6 +6,7 @@ const gStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingBottom: 70,
+    backgroundColor: 'black',
   },
 
   ScreenContainer_start: {
@@ -13,6 +14,7 @@ const gStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingBottom: 20,
+    backgroundColor: 'black',
   },
 
   text: {

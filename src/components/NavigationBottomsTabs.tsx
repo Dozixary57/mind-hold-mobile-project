@@ -15,7 +15,7 @@ const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
       </TouchableOpacity> */}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('UpgradeScreen')}
+        onPress={() => navigation.navigate('MainTabs', { screen: 'Upgrade' })}
         style={[styles.buttons, styles.leftButton]}
       >
         <Image
@@ -25,7 +25,7 @@ const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('HomeScreen')}
+        onPress={() => navigation.navigate('MainTabs', { screen: 'Home' })}
         style={[styles.buttons, styles.middleButton]}
       >
         <Image
@@ -35,7 +35,7 @@ const NavigationBottomsTabs = ({ navigation }: BottomTabBarProps) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('StatisticsScreen')}
+        onPress={() => navigation.navigate('MainTabs', { screen: 'Statistics' })}
         style={[styles.buttons, styles.rightButton]}
       >
         <Image

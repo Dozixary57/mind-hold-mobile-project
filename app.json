@@ -1,18 +1,14 @@
 {
   "expo": {
-    "name": "mind-hold",
-    "slug": "mind-hold",
+    "name": "Mind Hold",
+    "slug": "mind_hold",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "plugins": [
-      [
-        "@react-native-google-signin/google-signin"
-      ]
-    ],
+    "newArchEnabled": true,
     "splash": {
-      "image": "./src/assets/splash.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,12 +17,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dozixary57.holdMind"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fc890b94-8ead-4b2e-8638-a827dbe17e56"
+      }
     }
   }
 }

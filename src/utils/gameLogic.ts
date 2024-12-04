@@ -3,24 +3,22 @@ import { useEffect } from 'react';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 
 export const useGameLoop = () => {
-  const { valuesRef, updateValues, isHoldingRef, isHolding } = useGlobalValues();
+  const {
+    valuesRef,
+    updateValues,
+    isHoldingRef,
+    progressRef,
+    updateProgress,
+    // setIsActive
+  } = useGlobalValues();
 
-  //
   // useEffect(() => {
-  //   valuesRef.current.core_generator.amount = 1;
-  //   valuesRef.current.core_generator.rate = 1;
-  //   valuesRef.current.hold_bar.dischargingSpeed = 1;
-  //   valuesRef.current.hold_bar.capacity = 1;
-  //   valuesRef.current.hold_bar.chargingSpeed = 1;
-  // }, [])
-  //
-
-  useEffect(() => {
-    isHoldingRef.current = isHolding;
-  }, [isHolding]);
+  //   valuesRef.current.hold_bar.capacity = 10;
+  // }, []);
 
   useEffect(() => {
     let lastTimestamp = 0;
+    let frameCount = 0;
 
     const gameLoop = (timestamp: number) => {
       if (valuesRef.current.hold_bar.isFreezed) return;
@@ -29,25 +27,49 @@ export const useGameLoop = () => {
       const deltaTime = (timestamp - lastTimestamp) / 1000;
       lastTimestamp = timestamp;
 
-      const newValues = { ...valuesRef.current };
-      let newProgress = newValues.hold_bar.progress;
+      frameCount++;
+
+      const newValues = {
+        progress: progressRef.current,
+        chargingSpeed: valuesRef.current.hold_bar.chargingSpeed,
+        dischargingSpeed: valuesRef.current.hold_bar.dischargingSpeed,
+        delayBeforeDischargeCurrentValue: valuesRef.current.hold_bar.delayBeforeDischargeCurrentValue,
+        delayBeforeDischargeMaxValue: valuesRef.current.hold_bar.delayBeforeDischargeMaxValue,
+        capacity: valuesRef.current.hold_bar.capacity,
+      };
+
 
       if (isHoldingRef.current) {
-        newProgress += newValues.hold_bar.chargingSpeed * deltaTime;
-        newValues.hold_bar.delayBeforeDischargeCurrentValue = newValues.hold_bar.delayBeforeDischargeMaxValue;
+        newValues.progress += newValues.chargingSpeed * deltaTime;
+        newValues.delayBeforeDischargeCurrentValue = newValues.delayBeforeDischargeMaxValue;
       } else {
-        if (newValues.hold_bar.delayBeforeDischargeCurrentValue > 0) {
-          newValues.hold_bar.delayBeforeDischargeCurrentValue -= deltaTime;
+        if (newValues.delayBeforeDischargeCurrentValue > 0) {
+          newValues.delayBeforeDischargeCurrentValue -= deltaTime;
         } else {
-          newValues.hold_bar.delayBeforeDischargeCurrentValue = 0;
-          newProgress -= newValues.hold_bar.dischargingSpeed * deltaTime;
-          if (newProgress < 0) newProgress = 0;
+          newValues.delayBeforeDischargeCurrentValue = 0;
+          newValues.progress -= newValues.dischargingSpeed * deltaTime;
+          if (newValues.progress < 0) newValues.progress = 0;
         }
       }
 
-      newValues.hold_bar.progress = Math.max(0, Math.min(newValues.hold_bar.capacity, newProgress));
+      updateProgress(Math.max(0, Math.min(newValues.capacity, newValues.progress)));
 
-      updateValues(newValues);
+      if (frameCount % 30 === 0) {
+        updateValues({
+          ...valuesRef.current,
+          hold_bar: {
+            ...valuesRef.current.hold_bar,
+            progress: newValues.progress,
+            delayBeforeDischargeCurrentValue: newValues.delayBeforeDischargeCurrentValue,
+          },
+        });
+      }
+
+      // if (frameCount % 5 === 0) {
+      //   setIsActive(newValues.progress > 0);
+      // }
+
+      if (frameCount > 60) frameCount = 0;
 
       requestAnimationFrame(gameLoop);
     };

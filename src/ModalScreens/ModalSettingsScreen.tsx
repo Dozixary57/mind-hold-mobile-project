@@ -4,10 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import gStyles from '../styles/styles';
 import { useGlobalValues } from '../contexts/GlobalValuesContext';
 import { ScrollView } from 'react-native-gesture-handler';
+import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/commonjs/src/types';
+import { IStackParamList } from '../interfaces/INavigationParamList';
 
 const ModalSettingsScreen = () => {
   const { resetAppData } = useGlobalValues();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<IStackParamList>>();
 
   const confirmReset = () => {
     Alert.alert(
@@ -36,22 +38,46 @@ const ModalSettingsScreen = () => {
 
       <ScrollView contentContainerStyle={styles.scrollView}>
 
-        <View>
+        {/* <View>
+          <TouchableOpacity
+            style={styles.button}
+            // @ts-expect-error
+            onPress={() => { navigation.navigate('ModalAuthorizationScreen') }}
+          >
+            <Text style={styles.text}>Login</Text>
+          </TouchableOpacity>
+        </View> */}
+
+        {/* <View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => { }}
           >
             <Text style={styles.text}>Google OAuth</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <TouchableOpacity
           style={styles.button}
-          // @ts-expect-error
-          onPress={() => navigation.navigate('ModalDocumentationScreen')}
+          onPress={() => navigation.navigate('Documentation')}
         >
           <Text style={styles.text}>Open documentation</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          // onPress={() => navigation.navigate('Documentation')}
+        >
+          <Text style={styles.text}>Import data</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          // onPress={() => navigation.navigate('Documentation')}
+        >
+          <Text style={styles.text}>Export data</Text>
+        </TouchableOpacity>
+
 
         <TouchableOpacity
           style={styles.button}
@@ -69,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
+    backgroundColor: 'black',
   },
 
   scrollView: {
