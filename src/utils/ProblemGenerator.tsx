@@ -88,7 +88,7 @@ const ProblemList = {
   ],
 };
 
-interface IProblem {
+export interface IProblem {
   title: string;
   description: string;
   weight: number;
@@ -174,7 +174,7 @@ const generateProblem = (valuesRef: IGlobalValues): IProblem => {
     reward: {
       expirience: 1,
       neurobits: 1,
-    }
+    },
   };
 };
 
@@ -182,14 +182,27 @@ const generateProblemNumber = (): string => String(Math.floor(1 + Math.random() 
 
 const ProblemGenerator = forwardRef((props, ref) => {
   const holdBarHeight = GetScreenHeight() * 0.05;
-  const { updateValues, valuesRef, isActive, resetProblemRef } = useGlobalValues();
-  const [problem, setProblem] = useState(generateProblem(valuesRef.current));
-  const [problemWeight, setProblemWeight] = useState(() => calculateProblemWeightOnParameters(problem, valuesRef.current));
-  const [newWeight, setNewWeight] = useState(problemWeight);
+  const { updateValues, valuesRef, isActive, resetProblemRef, isInitialized } = useGlobalValues();
+  const [problem, setProblem] = useState(valuesRef.current.problem.problemData);
+  const [problemWeight, setProblemWeight] = useState(problem.weight);
+  const [newWeight, setNewWeight] = useState(valuesRef.current.problem.problemData.weight);
   const [shouldUpdateValues, setShouldUpdateValues] = useState(false);
 
+  useEffect(() => {
+    if (isInitialized) {
+      setProblem(valuesRef.current.problem.problemData);
+      setProblemWeight(valuesRef.current.problem.problemData.weight);
+      setNewWeight(valuesRef.current.problem.problemCurrentWeight);
+    }
+  }, [isInitialized]);
+
+  useEffect(() => {
+    console.log('problemWeight', problemWeight)
+    console.log('newWeight', newWeight)
+  }, [problemWeight, newWeight])
+
   const resetProblem = () => {
-    const newProblem = generateProblem(valuesRef.current);
+    const newProblem = valuesRef.current.problem.problemData;
     setProblem(newProblem);
     const newProblemWeight = calculateProblemWeightOnParameters(newProblem, valuesRef.current);
     setNewWeight(newProblemWeight);
@@ -209,6 +222,18 @@ const ProblemGenerator = forwardRef((props, ref) => {
   }, []);
 
   useEffect(() => {
+    if (isInitialized) {
+      updateValues({
+        ...valuesRef.current,
+        problem: {
+          problemData: problem,
+          problemCurrentWeight: newWeight
+        }
+      });
+    }
+  }, [problem, newWeight]);
+
+  useEffect(() => {
     const calculateCurrentWeight = () => {
       setNewWeight((prevWeight) => {
         const updatedWeight = RoundToTwoDecimals(prevWeight - valuesRef.current.core_generator.rate * valuesRef.current.core_generator.amount);
@@ -223,6 +248,7 @@ const ProblemGenerator = forwardRef((props, ref) => {
           setProblemWeight(newProblemWeight);
           return newProblemWeight;
         }
+
         return updatedWeight;
       });
     };

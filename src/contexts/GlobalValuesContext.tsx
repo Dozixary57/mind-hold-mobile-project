@@ -1,6 +1,7 @@
 // src\contexts\GlobalValuesContext.tsx
 import React, { createContext, useContext, ReactNode, useState, useCallback, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IProblem } from '../utils/ProblemGenerator';
 
 export interface IGlobalValues {
   app: {
@@ -8,6 +9,10 @@ export interface IGlobalValues {
   };
   lvl_experience: number;
   game_difficult_coef: number;
+  problem: {
+    problemData: IProblem;
+    problemCurrentWeight: number;
+  }
   hold_bar: {
     progress: number;
     capacity: number;
@@ -57,6 +62,8 @@ interface GlobalValuesProviderProps {
 }
 
 export interface GlobalValuesContextProps {
+  isInitialized: boolean;
+
   values: IGlobalValues;
   valuesRef: React.MutableRefObject<IGlobalValues>;
   updateValues: (newValues: Partial<IGlobalValues>) => void;
@@ -87,6 +94,25 @@ const initialValues: IGlobalValues = {
   app: { lastActiveTime: 0 },
   lvl_experience: 0,
   game_difficult_coef: 1,
+  problem: {
+    problemData: {
+      title: "Your first problem",
+      description: "Try to solve it",
+      parameters: {
+        analysis: 1,
+        logic: 1,
+        intuition: 1,
+        creativity: 1,
+        ideation: 1,
+      },
+      weight: 10,
+      reward: {
+        expirience: 1,
+        neurobits: 1,
+      },
+    },
+    problemCurrentWeight: 10,
+  },
   hold_bar: {
     progress: 0,
     capacity: 1,
@@ -127,6 +153,8 @@ const initialValues: IGlobalValues = {
 const STORAGE_KEY = 'globalValues';
 
 export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ children }) => {
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const [values, setValues] = useState<IGlobalValues>(initialValues);
   const [progress, setProgress] = useState(0);
   const progressRef = useRef(progress);
@@ -164,20 +192,31 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
       clearInterval(delay);
     };
   }, [progress]);
-    
+
   useEffect(() => {
     const loadValues = async () => {
       try {
         const storedValues = await AsyncStorage.getItem(STORAGE_KEY);
         if (storedValues) {
           const parsedValues = JSON.parse(storedValues);
-          setValues((prevValues) => ({
-            ...prevValues,
-            ...parsedValues,
-          }));
+
+          // console.log('Loaded values from storage (progress):', parsedValues.hold_bar.progress);
+
+          // setValues((prevValues) => ({
+          //   ...prevValues,
+          //   ...parsedValues,
+          // }));
+          // valuesRef.current = {
+          //   ...initialValues,
+          //   ...parsedValues,
+          // };
+
+          updateValues(parsedValues);
         }
       } catch (e) {
         console.error('Failed to load values from storage', e);
+      } finally {
+        setIsInitialized(true);
       }
     };
 
@@ -196,11 +235,13 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
   const saveAppData = useCallback(() => {
     const updatedValues = {
       ...valuesRef.current,
-      app: { 
-        ...valuesRef.current.app, 
-        lastActiveTime: Date.now() 
+      app: {
+        ...valuesRef.current.app,
+        lastActiveTime: Date.now()
       },
     };
+
+    // console.log('Saving values to storage (progress):', updatedValues.hold_bar.progress);
 
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) =>
       console.error('Failed to save values to storage', e)
@@ -221,6 +262,8 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
   return (
     <GlobalValuesContext.Provider
       value={{
+        isInitialized,
+
         values,
         valuesRef,
         updateValues,

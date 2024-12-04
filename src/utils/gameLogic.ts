@@ -9,12 +9,14 @@ export const useGameLoop = () => {
     isHoldingRef,
     progressRef,
     updateProgress,
-    // setIsActive
+    isInitialized
   } = useGlobalValues();
 
-  // useEffect(() => {
-  //   valuesRef.current.hold_bar.capacity = 10;
-  // }, []);
+  useEffect(() => {
+    if (isInitialized) {
+      updateProgress(valuesRef.current.hold_bar.progress);
+    }
+  }, [isInitialized]);
 
   useEffect(() => {
     let lastTimestamp = 0;

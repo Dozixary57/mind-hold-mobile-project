@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Mind Hold",
-    "slug": "mind_hold",
+    "slug": "mind-hold",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true
@@ -18,16 +18,16 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#000000"
       },
-      "package": "com.dozixary57.holdMind"
+      "package": "com.dozixary57.mindHold"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "fc890b94-8ead-4b2e-8638-a827dbe17e56"
+        "projectId": "cede847d-0706-4734-a808-403712acd1d5"
       }
     }
   }
