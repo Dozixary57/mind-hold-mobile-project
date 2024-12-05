@@ -1,12 +1,12 @@
 // src/App.tsx
 import React, { useEffect } from 'react';
-import { AppState } from 'react-native';
+import { AppState, View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './src/screens/HomeScreen';
 import UpgradeScreen from './src/screens/UpgradeScreen';
 import NavigationBottomsTabs from './src/components/NavigationBottomsTabs';
-import { useGameLoop } from './src/utils/gameLogic';
+import { useGameLoop } from './src/utils/GameLogic';
 import { GlobalValuesProvider, useGlobalValues } from './src/contexts/GlobalValuesContext';
 import { StatusBar } from 'expo-status-bar';
 import StatisticsScreen from './src/screens/StatisticsScreen';
@@ -15,7 +15,7 @@ import ModalSettingsScreen from './src/ModalScreens/ModalSettingsScreen';
 import ModalDocumentationScreen from './src/ModalScreens/ModalDocumentationScreen';
 import { IStackParamList, ITabParamList } from './src/interfaces/INavigationParamList';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import ModalAuthorizationScreen from './src/ModalScreens/ModalAuthorizationScreen';
+import Toast from 'react-native-toast-message';
 
 const Stack = createStackNavigator<IStackParamList>();
 const Tab = createBottomTabNavigator<ITabParamList>();
@@ -65,7 +65,6 @@ function AppContent() {
         <Stack.Screen name="MainTabs" component={TabNavigator} />
         <Stack.Screen name="Settings" component={ModalSettingsScreen} options={{ title: 'Settings', animation: 'fade' }} />
         <Stack.Screen name="Documentation" component={ModalDocumentationScreen} options={{ title: 'Documentation', animation: 'fade' }} />
-        {/* <Stack.Screen name="ModalAuthorizationScreen" component={ModalAuthorizationScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -74,10 +73,35 @@ function AppContent() {
 export default function App() {
   return (
     <GlobalValuesProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+      <SafeAreaView style={{ position: 'relative', flex: 1, backgroundColor: 'black' }}>
         <StatusBar hidden={true} />
         <AppContent />
+        <Toast
+          config={{
+            custom: ({ text1 }) => (
+              <View style={styles.toastContainer}>
+                <Text style={styles.toastText}>{text1}</Text>
+              </View>
+            ),
+          }}
+        />
       </SafeAreaView>
     </GlobalValuesProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  toastContainer: {
+    position: "absolute",
+    bottom: 20,
+    paddingVertical: 4,
+    paddingHorizontal: 26,
+    borderRadius: 5,
+    backgroundColor: "white",
+  },
+  toastText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "black",
+  },
+});

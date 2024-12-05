@@ -196,11 +196,6 @@ const ProblemGenerator = forwardRef((props, ref) => {
     }
   }, [isInitialized]);
 
-  useEffect(() => {
-    console.log('problemWeight', problemWeight)
-    console.log('newWeight', newWeight)
-  }, [problemWeight, newWeight])
-
   const resetProblem = () => {
     const newProblem = valuesRef.current.problem.problemData;
     setProblem(newProblem);

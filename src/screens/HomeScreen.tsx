@@ -1,6 +1,6 @@
 // src/screens/MainScreen.tsx
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import HoldBar from "../components/HoldBar";
 // import DebugPanel from "../tools/DebugPanel";
 import gStyles from "../styles/styles";

@@ -1,7 +1,12 @@
 // src\contexts\GlobalValuesContext.tsx
 import React, { createContext, useContext, ReactNode, useState, useCallback, useEffect, useRef } from 'react';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as DocumentPicker from 'expo-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IProblem } from '../utils/ProblemGenerator';
+import CryptoJS from 'react-native-crypto-js';
+import Toast from 'react-native-toast-message';
 
 export interface IGlobalValues {
   app: {
@@ -78,6 +83,9 @@ export interface GlobalValuesContextProps {
   isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   resetProblemRef: React.MutableRefObject<(() => void) | null>;
+
+  importAppData: () => void;
+  exportAppData: () => void;
 }
 
 const GlobalValuesContext = createContext<GlobalValuesContextProps | undefined>(undefined);
@@ -200,17 +208,6 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
         if (storedValues) {
           const parsedValues = JSON.parse(storedValues);
 
-          // console.log('Loaded values from storage (progress):', parsedValues.hold_bar.progress);
-
-          // setValues((prevValues) => ({
-          //   ...prevValues,
-          //   ...parsedValues,
-          // }));
-          // valuesRef.current = {
-          //   ...initialValues,
-          //   ...parsedValues,
-          // };
-
           updateValues(parsedValues);
         }
       } catch (e) {
@@ -241,8 +238,6 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
       },
     };
 
-    // console.log('Saving values to storage (progress):', updatedValues.hold_bar.progress);
-
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedValues)).catch((e) =>
       console.error('Failed to save values to storage', e)
     ).finally(() => {
@@ -251,13 +246,140 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
   }, []);
 
   const resetAppData = useCallback(() => {
-    setValues(initialValues);
+    updateValues(initialValues);
     valuesRef.current = initialValues;
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(initialValues)).catch((e) =>
       console.error('Failed to reset values to storage', e)
     );
     resetProblemRef.current?.();
+
+    Toast.show({
+      type: 'custom',
+      text1: 'Reset successful',
+      position: 'bottom',
+      visibilityTime: 2000,
+    });
   }, []);
+
+  // const exportAppData = async () => {
+  //   try {
+  //     const fileContent = JSON.stringify(values);
+
+  //     const fileUri = `${FileSystem.documentDirectory}MindHoldSave.json`;
+
+  //     await FileSystem.writeAsStringAsync(fileUri, fileContent, {
+  //       encoding: FileSystem.EncodingType.UTF8,
+  //     });
+
+  //     if (await Sharing.isAvailableAsync()) {
+  //       await Sharing.shareAsync(fileUri, { dialogTitle: 'Save Game Data' });
+  //     } else {
+  //       console.log('Sharing is not available');
+  //     }
+  //   } catch (e) {
+  //     console.error('Export failed:', e);
+  //   }
+  // };
+
+  // const importAppData = async () => {
+  //   try {
+  //     setIsInitialized(false);
+  //     const result = await DocumentPicker.getDocumentAsync({
+  //       type: 'application/json',
+  //     });
+
+  //     if (result.canceled) {
+  //       console.log('Import canceled by user.');
+  //       return;
+  //     }
+
+  //     const fileContent = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+  //       encoding: FileSystem.EncodingType.UTF8,
+  //     });
+
+  //     const importedData = JSON.parse(fileContent);
+
+  //     updateValues(importedData);
+  //     console.log('Import successful:', importedData);
+  //   } catch (e) {
+  //     console.error('Import failed:', e);
+  //   } finally {
+  //     setIsInitialized(true);
+  //   }
+  // };
+
+  const ENCRYPTION_KEY = 'MindHoldEncryptionKeyMindHoldEncryp';
+
+  const exportAppData = async () => {
+    try {
+      const fileContent = JSON.stringify(values);
+
+      const encryptedContent = CryptoJS.AES.encrypt(fileContent, ENCRYPTION_KEY).toString();
+
+      const fileUri = `${FileSystem.documentDirectory}MindHoldSave.json`;
+
+      await FileSystem.writeAsStringAsync(fileUri, encryptedContent, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(fileUri, { dialogTitle: 'Save Game Data' });
+      } else {
+        console.log('Sharing is not available');
+      }
+
+      Toast.show({
+        type: 'custom',
+        text1: 'Export successful',
+        position: 'bottom',
+        visibilityTime: 2000,
+      });
+    } catch (e) {
+      console.error('Export failed:', e);
+    }
+  };
+
+  const importAppData = async () => {
+    try {
+      setIsInitialized(false);
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+      });
+
+      if (result.canceled) {
+        Toast.show({
+          type: 'custom',
+          text1: 'Import canceled',
+          position: 'bottom',
+          visibilityTime: 2000,
+        });
+
+        return;
+      }
+
+      const fileContent = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      const decryptedBytes = CryptoJS.AES.decrypt(fileContent, ENCRYPTION_KEY);
+      const decryptedContent = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+      const importedData = JSON.parse(decryptedContent);
+
+      updateValues(importedData);
+
+      Toast.show({
+        type: 'custom',
+        text1: 'Import successful',
+        position: 'bottom',
+        visibilityTime: 2000,
+      });
+    } catch (e) {
+      console.error('Import failed:', e);
+    } finally {
+      setIsInitialized(true);
+    }
+  };
 
   return (
     <GlobalValuesContext.Provider
@@ -278,6 +400,9 @@ export const GlobalValuesProvider: React.FC<GlobalValuesProviderProps> = ({ chil
         isActive,
         setIsActive,
         resetProblemRef,
+
+        exportAppData,
+        importAppData
       }}
     >
       {children}

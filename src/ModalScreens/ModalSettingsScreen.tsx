@@ -8,7 +8,7 @@ import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/comm
 import { IStackParamList } from '../interfaces/INavigationParamList';
 
 const ModalSettingsScreen = () => {
-  const { resetAppData } = useGlobalValues();
+  const { resetAppData, importAppData, exportAppData } = useGlobalValues();
   const navigation = useNavigation<StackNavigationProp<IStackParamList>>();
 
   const confirmReset = () => {
@@ -22,7 +22,7 @@ const ModalSettingsScreen = () => {
         },
         {
           text: 'Reset',
-          onPress: resetAppData,
+          onPress: () => {resetAppData(); navigation.goBack()},
           style: 'destructive',
         },
       ]
@@ -37,26 +37,6 @@ const ModalSettingsScreen = () => {
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollView}>
-
-        {/* <View>
-          <TouchableOpacity
-            style={styles.button}
-            // @ts-expect-error
-            onPress={() => { navigation.navigate('ModalAuthorizationScreen') }}
-          >
-            <Text style={styles.text}>Login</Text>
-          </TouchableOpacity>
-        </View> */}
-
-        {/* <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => { }}
-          >
-            <Text style={styles.text}>Google OAuth</Text>
-          </TouchableOpacity>
-        </View> */}
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Documentation')}
@@ -66,18 +46,23 @@ const ModalSettingsScreen = () => {
 
         <TouchableOpacity
           style={styles.button}
-          // onPress={() => navigation.navigate('Documentation')}
+          onPress={() => {
+            importAppData();
+            navigation.goBack()
+          }}
         >
           <Text style={styles.text}>Import data</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          // onPress={() => navigation.navigate('Documentation')}
+          onPress={() => {
+            exportAppData();
+            navigation.goBack()
+          }}
         >
           <Text style={styles.text}>Export data</Text>
         </TouchableOpacity>
-
 
         <TouchableOpacity
           style={styles.button}
