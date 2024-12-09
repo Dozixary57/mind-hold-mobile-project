@@ -172,8 +172,8 @@ const generateProblem = (valuesRef: IGlobalValues): IProblem => {
     parameters: problemParameters,
     weight: valuesRef.characteristic_coefficients.problemWeightCoef ? RoundToInteger(10 * valuesRef.characteristic_coefficients.problemWeightCoef) : 1,
     reward: {
-      expirience: 1,
-      neurobits: 1,
+      expirience: 1 + valuesRef.upgrade_values.additionalNeurobits,
+      neurobits: 1 + valuesRef.upgrade_values.additionalNeurobits,
     },
   };
 };

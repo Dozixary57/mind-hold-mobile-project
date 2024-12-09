@@ -20,18 +20,15 @@ const StatisticsScreen = () => {
           <Text style={gStyles.subsectionTitleSeparator_text}>Progress</Text>
           <View style={gStyles.subsectionTitleSeparator_line} />
         </View>
-        <View style={styles.statsItem}>
+        {/* <View style={styles.statsItem}>
           <Text style={styles.statsTitle}>In game total spent time</Text>
-          {/* <Text style={styles.statsValue}>{values.lvl_experience}</Text> */}
         </View>
         <View style={styles.statsItem}>
           <Text style={styles.statsTitle}>Active spent time</Text>
-          {/* <Text style={styles.statsValue}>{values.lvl_experience}</Text> */}
         </View>
         <View style={styles.statsItem}>
           <Text style={styles.statsTitle}>Inactive spent time</Text>
-          {/* <Text style={styles.statsValue}>{values.lvl_experience}</Text> */}
-        </View>
+        </View> */}
         <View style={styles.statsItem}>
           <Text style={styles.statsTitle}>Total problems solved</Text>
           <Text style={styles.statsValue}>{values.statistics.totalSolvedProblems}</Text>

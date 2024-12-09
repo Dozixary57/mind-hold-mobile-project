@@ -202,7 +202,7 @@ export { LevelAndStorageBar, LevelAndStorageBar_Minimalized };
 
 const styles = StyleSheet.create({
   Component: {
-    width: '90%',
+    width: '100%',
     flexDirection: 'column',
   },
 

@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 const gStyles = StyleSheet.create({
   ScreenContainer_stretch: {
     position: 'relative',
+    paddingHorizontal: 10,
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -12,6 +13,7 @@ const gStyles = StyleSheet.create({
 
   ScreenContainer_start: {
     position: 'relative',
+    paddingHorizontal: 10,
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',

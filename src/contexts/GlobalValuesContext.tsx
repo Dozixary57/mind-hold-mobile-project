@@ -60,6 +60,10 @@ export interface IGlobalValues {
     problemGainedExperienceCoef: number;
     problemGainedNeurobitsCoef: number;
   };
+  upgrade_values: {
+    additionalNeurobits: number;
+    additionalExperience: number;
+  }
 }
 
 interface GlobalValuesProviderProps {
@@ -155,6 +159,10 @@ const initialValues: IGlobalValues = {
     problemWeightCoef: 1,
     problemGainedExperienceCoef: 1,
     problemGainedNeurobitsCoef: 1,
+  },
+  upgrade_values: {
+    additionalNeurobits: 0,
+    additionalExperience: 0,
   },
 };
 
